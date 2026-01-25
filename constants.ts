@@ -11,9 +11,9 @@ export const GENERAL_EMAIL = "harshnarayansingh306@gmail.com";
 export const HERO_INTRO = "I build scalable backend systems and machine learning solutions using real-world data. Experienced with SaaS platforms, cloud deployment, and POS system integrations.";
 
 export const ABOUT_TEXT = [
-  "I am a final-year B.Tech Computer Science Engineering student specializing in Data Science, graduating in 2026.",
-  "My technical foundation is built on hands-on experience with Python backend development, machine learning models, and cloud services. I have worked extensively with large-scale production datasets, including analyzing over 90,000 order records to drive business insights.",
-  "I focus on solving complex business problems using clean, scalable, and maintainable technical solutions. Whether it is integrating fragmented POS systems or optimizing machine learning pipelines, I approach every challenge with a production-first mindset."
+  "I'm a backend engineer who happens to be graduating with a B.Tech in 2026.",
+  "While most of my classmates were doing academic projects, I was in the trenches — processing 90,000+ real restaurant orders, debugging OAuth integrations at 2 AM, and learning that production data is never as clean as tutorial datasets.",
+  "I specialize in Python backend development, machine learning pipelines, and cloud deployments. But what I really do is solve business problems: reducing manual work, speeding up slow systems, and making sense of messy data. I believe great code isn't just elegant — it ships, scales, and makes money."
 ];
 
 export const SKILL_CATEGORIES: SkillCategory[] = [
