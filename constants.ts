@@ -5,8 +5,8 @@ export const TITLE = "Python Developer | Machine Learning Engineer | Backend Sys
 export const LOCATION = "India";
 export const GITHUB_URL = "https://github.com/HarshNsingh001";
 export const LINKEDIN_URL = "https://www.linkedin.com/in/harshnarayansingh/";
-export const RECRUITER_EMAIL = "recruiter.harsh@email.com";
-export const GENERAL_EMAIL = "contact@email.com"; // Placeholder
+export const RECRUITER_EMAIL = "harshnarayansingh306@gmail.com";
+export const GENERAL_EMAIL = "harshnarayansingh306@gmail.com";
 
 export const HERO_INTRO = "I build scalable backend systems and machine learning solutions using real-world data. Experienced with SaaS platforms, cloud deployment, and POS system integrations.";
 
