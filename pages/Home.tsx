@@ -170,7 +170,7 @@ const Home: React.FC = () => {
               A comprehensive overview of my academic background, professional experience, and technical capabilities.
             </p>
             <a
-              href="https://drive.google.com/file/d/1GUtSP8Iun0Q2l6Kbi90jPIi9Yxb05JvZ/view?usp=sharing"
+              href="https://drive.google.com/file/d/1RDcy8dcDlOVRArxpikfwSl0RjbbL01iQ/view?usp=sharing"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-3 bg-om-navy text-white px-8 py-4 uppercase tracking-widest text-sm hover:bg-om-charcoal transition-colors min-w-[200px]"
