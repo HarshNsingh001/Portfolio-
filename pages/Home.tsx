@@ -359,7 +359,7 @@ const Home: React.FC = () => {
           <div className="bg-om-charcoal/30 border border-om-charcoal/50 p-8 md:p-12 rounded-sm backdrop-blur-sm mb-12">
             <a
               href={`mailto:${RECRUITER_EMAIL}`}
-              className="text-2xl md:text-4xl font-serif text-white hover:text-om-gold transition-colors border-b-2 border-om-gold/30 hover:border-om-gold pb-1 inline-block mb-8"
+              className="text-xl md:text-3xl font-serif text-white hover:text-om-gold transition-colors border-b-2 border-om-gold/30 hover:border-om-gold pb-1 inline-block mb-8 break-all"
             >
               {RECRUITER_EMAIL}
             </a>
