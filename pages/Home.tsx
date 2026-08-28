@@ -1,405 +1,994 @@
-import React from 'react';
-import { ArrowUpRight, Download, Mail, Github, Linkedin, ChevronDown } from 'lucide-react';
-import Section from '../components/Section';
+import React, { useEffect, useRef, useState, Suspense } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ArrowUpRight, Download, Mail, Github, Linkedin, ChevronDown, Sparkles, Terminal, Cpu, Database, Cloud } from 'lucide-react';
 import {
   FULL_NAME, TITLE, HERO_INTRO, LOCATION, GITHUB_URL, LINKEDIN_URL,
-  ABOUT_TEXT, SKILL_CATEGORIES, EXPERIENCES, PROJECTS, INTERESTS,
-  RECRUITER_EMAIL, GENERAL_EMAIL
+  ABOUT_TEXT, SKILL_CATEGORIES, EXPERIENCES, PROJECTS,
+  RECRUITER_EMAIL, GENERAL_EMAIL, RESUME_URL
 } from '../constants';
+import ArmillarySphere from '../components/3d/ArmillarySphere';
 
-const Home: React.FC = () => {
+gsap.registerPlugin(ScrollTrigger);
+
+export default function Home() {
+  const heroRef = useRef<HTMLElement>(null);
+  const badgeRef = useRef<HTMLDivElement>(null);
+  const nameRef = useRef<HTMLHeadingElement>(null);
+  const titleRef = useRef<HTMLParagraphElement>(null);
+  const introRef = useRef<HTMLParagraphElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
+  const scrollHintRef = useRef<HTMLDivElement>(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  /* ── GSAP hero entrance + scroll animations ── */
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Hero entrance timeline
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+      if (badgeRef.current) {
+        tl.fromTo(badgeRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7, delay: 0.1 });
+      }
+      if (nameRef.current) {
+        tl.fromTo(nameRef.current, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.9 }, '-=0.4');
+      }
+      if (titleRef.current) {
+        tl.fromTo(titleRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7 }, '-=0.5');
+      }
+      if (introRef.current) {
+        tl.fromTo(introRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7 }, '-=0.5');
+      }
+      if (ctaRef.current) {
+        tl.fromTo(ctaRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7 }, '-=0.4');
+      }
+      if (scrollHintRef.current) {
+        tl.fromTo(scrollHintRef.current, { opacity: 0 }, { opacity: 1, duration: 0.8 }, '-=0.2');
+      }
+
+      // Track scroll for 3D sphere deconstruction
+      ScrollTrigger.create({
+        trigger: heroRef.current,
+        start: 'top top',
+        end: 'bottom top',
+        onUpdate: (self) => setScrollProgress(self.progress),
+      });
+
+      // Section reveals
+      const revealSections = document.querySelectorAll('.section-reveal');
+      revealSections.forEach((section) => {
+        const elements = section.querySelectorAll('.gsap-reveal');
+        const scaleEls = section.querySelectorAll('.gsap-reveal-scale');
+
+        if (elements.length) {
+          gsap.fromTo(elements,
+            { opacity: 0, y: 35 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.8,
+              stagger: 0.1,
+              ease: 'power3.out',
+              scrollTrigger: {
+                trigger: section,
+                start: 'top 82%',
+                toggleActions: 'play none none none',
+              }
+            }
+          );
+        }
+
+        if (scaleEls.length) {
+          gsap.fromTo(scaleEls,
+            { opacity: 0, scale: 0.92 },
+            {
+              opacity: 1,
+              scale: 1,
+              duration: 0.8,
+              stagger: 0.08,
+              ease: 'power3.out',
+              scrollTrigger: {
+                trigger: section,
+                start: 'top 82%',
+                toggleActions: 'play none none none',
+              }
+            }
+          );
+        }
+      });
+    });
+
+    return () => ctx.revert();
+  }, []);
+
+  /* ── shared section heading helper ── */
+  const sectionHeading = (label: string, title: string) => (
+    <div className="gsap-reveal" style={{ marginBottom: '3.5rem' }}>
+      <span className="section-label" style={{ marginBottom: '0.75rem' }}>{label}</span>
+      <h2 style={{
+        fontFamily: 'var(--font-display)',
+        fontSize: 'clamp(2.2rem, 4.5vw, 3.5rem)',
+        fontWeight: 800,
+        letterSpacing: '-0.02em',
+        lineHeight: 1.15,
+        background: 'linear-gradient(135deg, #ffffff 0%, var(--gold-light) 60%, var(--gold) 100%)',
+        WebkitBackgroundClip: 'text',
+        WebkitTextFillColor: 'transparent',
+        backgroundClip: 'text',
+      }}>
+        {title}
+      </h2>
+      <div className="gold-divider" style={{ marginTop: '1.25rem' }} />
+    </div>
+  );
+
   return (
     <>
-      {/* Hero Section */}
-      <section id="home" className="min-h-screen flex flex-col justify-center items-center relative px-6 bg-om-bg border-b border-om-beige/30 overflow-hidden">
-        <div className="max-w-6xl w-full mx-auto flex flex-col items-center justify-center text-center z-10 animate-fade-in-up md:pt-0 pt-20 pb-20 md:pb-0">
+      {/* ════════════════════════════════════════
+          HERO SECTION
+          ════════════════════════════════════════ */}
+      <section
+        ref={heroRef}
+        id="home"
+        style={{
+          minHeight: '100vh',
+          position: 'relative',
+          display: 'flex',
+          alignItems: 'center',
+          overflow: 'hidden',
+          background: 'var(--bg)',
+          paddingTop: '6rem',
+          paddingBottom: '4rem',
+        }}
+      >
+        {/* Ambient Gold Radial Glow */}
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          zIndex: 0,
+          background: 'radial-gradient(ellipse 65% 65% at 75% 45%, rgba(201,168,76,0.1) 0%, rgba(5,5,5,0) 70%)',
+          pointerEvents: 'none',
+        }} />
 
-          {/* Label */}
-          <p className="text-om-gold text-xs md:text-sm tracking-[0.25em] uppercase font-semibold mb-6 md:mb-8">
-            IT’S ME
-          </p>
+        {/* 3D Armillary Sphere Canvas — Desktop Right Side / Background */}
+        <div
+          className="hero-canvas-container"
+          style={{
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            width: '58%',
+            height: '100%',
+            zIndex: 1,
+            pointerEvents: 'none',
+            opacity: Math.max(0, 1 - scrollProgress * 1.2),
+            transition: 'opacity 0.2s linear',
+          }}
+        >
+          <Suspense fallback={null}>
+            <ArmillarySphere scrollProgress={scrollProgress} />
+          </Suspense>
+        </div>
 
-          {/* Name */}
-          <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl text-om-navy tracking-tight leading-none font-bold mb-4 md:mb-6 px-4">
-            {FULL_NAME}
-          </h1>
+        {/* Hero Content Container */}
+        <div className="container" style={{ position: 'relative', zIndex: 2, width: '100%' }}>
+          <div className="hero-text-wrapper" style={{ maxWidth: '680px' }}>
+            
+            {/* Status / Location Badge */}
+            <div
+              ref={badgeRef}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.6rem',
+                padding: '0.4rem 1rem',
+                borderRadius: '9999px',
+                background: 'rgba(201, 168, 76, 0.08)',
+                border: '1px solid rgba(201, 168, 76, 0.25)',
+                marginBottom: '1.75rem',
+              }}
+            >
+              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--gold)', boxShadow: '0 0 10px var(--gold)' }} />
+              <span style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.65rem',
+                letterSpacing: '0.15em',
+                textTransform: 'uppercase',
+                color: 'var(--gold-light)',
+                fontWeight: 500,
+              }}>
+                {LOCATION} · SOFTWARE & ML ENGINEER
+              </span>
+            </div>
 
-          {/* Title */}
-          <h2 className="text-lg md:text-2xl text-om-charcoal font-medium tracking-wide mb-6 md:mb-8 px-4">
-            {TITLE}
-          </h2>
+            {/* Full Name */}
+            <h1
+              ref={nameRef}
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: 'clamp(2.8rem, 6.5vw, 5.2rem)',
+                fontWeight: 800,
+                lineHeight: 1.05,
+                letterSpacing: '-0.025em',
+                marginBottom: '1.25rem',
+              }}
+            >
+              <span
+                style={{
+                  background: 'linear-gradient(135deg, #FFFFFF 20%, var(--gold-light) 70%, var(--gold) 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                  display: 'block',
+                }}
+              >
+                HARSH NARAYAN
+              </span>
+              <span
+                style={{
+                  color: 'var(--gold)',
+                  textShadow: '0 0 35px rgba(201, 168, 76, 0.35)',
+                  display: 'block',
+                }}
+              >
+                SINGH
+              </span>
+            </h1>
 
-          {/* Intro */}
-          <p className="text-om-charcoal/80 text-base md:text-lg max-w-2xl mx-auto leading-relaxed font-light mb-10 md:mb-12 px-4">
-            {HERO_INTRO}
-          </p>
+            {/* Title / Role Subtitle */}
+            <p
+              ref={titleRef}
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: 'clamp(0.8rem, 1.6vw, 0.95rem)',
+                color: 'var(--gold-light)',
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+                marginBottom: '1.5rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                flexWrap: 'wrap',
+              }}
+            >
+              <span>Python Developer</span>
+              <span style={{ color: 'var(--gold-dark)' }}>//</span>
+              <span>Machine Learning</span>
+              <span style={{ color: 'var(--gold-dark)' }}>//</span>
+              <span>Backend Systems</span>
+            </p>
 
-          {/* Links */}
-          <div className="flex flex-row items-center justify-center gap-4 text-xs md:text-sm tracking-widest uppercase text-om-charcoal/90">
-            <span className="font-semibold text-om-navy">{LOCATION}</span>
-            <span className="text-om-gold">•</span>
-            <a href={GITHUB_URL} target="_blank" rel="noreferrer" className="hover:text-om-gold transition-colors font-medium hover:underline decoration-om-gold/50 underline-offset-4">GitHub</a>
-            <span className="text-om-gold">•</span>
-            <a href={LINKEDIN_URL} target="_blank" rel="noreferrer" className="hover:text-om-gold transition-colors font-medium hover:underline decoration-om-gold/50 underline-offset-4">LinkedIn</a>
+            {/* Intro Bio */}
+            <p
+              ref={introRef}
+              style={{
+                color: 'var(--text-secondary)',
+                fontSize: 'clamp(0.95rem, 1.8vw, 1.1rem)',
+                lineHeight: 1.8,
+                maxWidth: '540px',
+                fontWeight: 300,
+                marginBottom: '2.5rem',
+              }}
+            >
+              {HERO_INTRO}
+            </p>
+
+            {/* CTA Buttons */}
+            <div
+              ref={ctaRef}
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '1.25rem',
+                alignItems: 'center',
+              }}
+            >
+              <button
+                className="btn-gold"
+                onClick={() => {
+                  const el = document.getElementById('contact');
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                }}
+                data-cursor-hover
+              >
+                <span>Get in Touch</span>
+                <span><ArrowUpRight size={15} /></span>
+              </button>
+
+              <a
+                href={RESUME_URL}
+                download="Harsh_Narayan_Singh_Resume.pdf"
+                className="btn-gold"
+                style={{ textDecoration: 'none' }}
+                data-cursor-hover
+              >
+                <span>Resume</span>
+                <span><Download size={15} /></span>
+              </a>
+            </div>
           </div>
         </div>
 
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce text-om-gold/60 z-10 hidden md:block">
-          <ChevronDown size={24} />
+        {/* Scroll Indicator */}
+        <div
+          ref={scrollHintRef}
+          style={{
+            position: 'absolute',
+            bottom: '2rem',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '0.5rem',
+            zIndex: 2,
+            pointerEvents: 'none',
+          }}
+        >
+          <span style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '0.55rem',
+            letterSpacing: '0.3em',
+            textTransform: 'uppercase',
+            color: 'var(--text-muted)',
+          }}>
+            SCROLL
+          </span>
+          <div style={{
+            width: '1px',
+            height: '45px',
+            background: 'linear-gradient(to bottom, var(--gold), transparent)',
+            animation: 'scrollPulse 2s ease-in-out infinite',
+          }} />
         </div>
+
+        <style>{`
+          @keyframes scrollPulse {
+            0%, 100% { opacity: 0.3; transform: scaleY(0.9); }
+            50% { opacity: 1; transform: scaleY(1.1); }
+          }
+          @media (max-width: 900px) {
+            .hero-canvas-container {
+              width: 100% !important;
+              opacity: 0.3 !important;
+            }
+            .hero-text-wrapper {
+              max-width: 100% !important;
+            }
+          }
+        `}</style>
       </section>
 
-      {/* About Section */}
-      <Section id="about" title="About Me" dark>
-        <div className="max-w-3xl mx-auto text-lg md:text-xl text-om-charcoal leading-relaxed space-y-6 font-light text-center">
-          {ABOUT_TEXT.map((paragraph, idx) => (
-            <p key={idx}>{paragraph}</p>
-          ))}
+      {/* ════════════════════════════════════════
+          ABOUT SECTION
+          ════════════════════════════════════════ */}
+      <section
+        id="about"
+        className="section-reveal"
+        style={{
+          padding: '8rem 0',
+          background: 'var(--bg-2)',
+          position: 'relative',
+          overflow: 'hidden',
+          borderTop: '1px solid rgba(201, 168, 76, 0.08)',
+        }}
+      >
+        <div className="section-bg-number">01</div>
+
+        <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: '4.5rem', alignItems: 'center' }} className="about-grid">
+            <div>
+              {sectionHeading('// 01. ABOUT ME', 'Engineering Scalable Systems with Production Data')}
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                {ABOUT_TEXT.map((para, i) => (
+                  <p
+                    key={i}
+                    className="gsap-reveal"
+                    style={{
+                      color: 'var(--text-secondary)',
+                      fontSize: '1.05rem',
+                      lineHeight: 1.85,
+                      fontWeight: 300,
+                    }}
+                  >
+                    {para}
+                  </p>
+                ))}
+              </div>
+            </div>
+
+            {/* Metrics Grid */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.25rem' }}>
+              {[
+                { num: '90K+', label: 'Real Restaurant Orders Processed' },
+                { num: '20%', label: 'P95 API Latency Reduction' },
+                { num: '250+', label: 'Algorithmic DSA Problems Solved' },
+                { num: '3+', label: 'Production Industry Deployments' },
+              ].map((stat, i) => (
+                <div
+                  key={i}
+                  className="glass-card-gold gsap-reveal-scale"
+                  style={{
+                    padding: '2rem 1.5rem',
+                    borderRadius: '8px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <div className="stat-number">{stat.num}</div>
+                  <p style={{
+                    color: 'var(--text-secondary)',
+                    fontSize: '0.75rem',
+                    letterSpacing: '0.04em',
+                    marginTop: '0.65rem',
+                    lineHeight: 1.5,
+                  }}>
+                    {stat.label}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-      </Section>
 
-      {/* Experience Section */}
-      <Section id="experience" title="Professional Experience">
-        <div className="space-y-16 max-w-4xl mx-auto">
-          {EXPERIENCES.map((exp) => (
-            <div key={exp.id} className="relative pl-8 md:pl-0">
-              {/* Timeline Line (Desktop) */}
-              <div className="hidden md:block absolute left-[150px] top-2 bottom-0 w-px bg-om-beige"></div>
+        <style>{`
+          @media (max-width: 850px) {
+            .about-grid {
+              grid-template-columns: 1fr !important;
+              gap: 3rem !important;
+            }
+          }
+        `}</style>
+      </section>
 
-              <div className="flex flex-col md:flex-row gap-8 md:gap-16">
-                {/* Date Column */}
-                <div className="md:w-[150px] md:text-right shrink-0">
-                  <span className="text-sm font-semibold tracking-widest text-om-gold uppercase block mb-1">
+      {/* ════════════════════════════════════════
+          EXPERIENCE SECTION
+          ════════════════════════════════════════ */}
+      <section
+        id="experience"
+        className="section-reveal"
+        style={{
+          padding: '8rem 0',
+          background: 'var(--bg)',
+          position: 'relative',
+          overflow: 'hidden',
+          borderTop: '1px solid rgba(201, 168, 76, 0.08)',
+        }}
+      >
+        <div className="section-bg-number">02</div>
+
+        <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+          {sectionHeading('// 02. EXPERIENCE', 'Professional Track Record')}
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+            {EXPERIENCES.map((exp, idx) => (
+              <div
+                key={exp.id}
+                className="glass-card gsap-reveal"
+                style={{
+                  padding: '2.5rem',
+                  borderRadius: '8px',
+                  display: 'grid',
+                  gridTemplateColumns: '220px 1fr',
+                  gap: '2.5rem',
+                  position: 'relative',
+                }}
+              >
+                {/* Left Column: Metadata */}
+                <div>
+                  <span style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.7rem',
+                    color: 'var(--gold)',
+                    letterSpacing: '0.15em',
+                    textTransform: 'uppercase',
+                    display: 'block',
+                    marginBottom: '0.4rem',
+                    fontWeight: 600,
+                  }}>
                     {exp.period}
+                  </span>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '0.2rem' }}>
+                    {exp.location}
+                  </p>
+                  <span style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.62rem',
+                    color: 'var(--text-muted)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.1em',
+                  }}>
+                    {exp.type}
                   </span>
                 </div>
 
-                {/* Content Column */}
-                <div className="flex-grow relative">
-                  {/* Timeline Dot */}
-                  <div className="hidden md:block absolute -left-[41px] top-1.5 w-3 h-3 rounded-full bg-om-bg border-2 border-om-gold"></div>
-
-                  <h3 className="font-serif text-2xl text-om-navy mb-1">
+                {/* Right Column: Role & Impact */}
+                <div>
+                  <h3 style={{
+                    fontFamily: 'var(--font-display)',
+                    fontSize: 'clamp(1.3rem, 2.5vw, 1.6rem)',
+                    fontWeight: 700,
+                    color: '#ffffff',
+                    marginBottom: '0.35rem',
+                  }}>
                     {exp.role}
                   </h3>
-                  <div className="text-lg text-om-charcoal mb-6 font-medium">
-                    {exp.company} <span className="text-om-beige mx-2">|</span> <span className="text-om-charcoal/70 font-normal">{exp.location}</span>
-                  </div>
+                  <p style={{
+                    color: 'var(--gold-light)',
+                    fontSize: '0.95rem',
+                    fontWeight: 500,
+                    marginBottom: '1.25rem',
+                  }}>
+                    {exp.company}
+                  </p>
 
-                  <ul className="space-y-3">
+                  <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                     {exp.responsibilities.map((resp, i) => (
-                      <li key={i} className="text-om-charcoal/90 leading-relaxed flex items-start gap-3">
-                        <span className="text-om-gold mt-2 text-[10px]">♦</span>
+                      <li
+                        key={i}
+                        style={{
+                          display: 'flex',
+                          gap: '0.8rem',
+                          color: 'var(--text-secondary)',
+                          fontSize: '0.92rem',
+                          lineHeight: 1.7,
+                          fontWeight: 300,
+                        }}
+                      >
+                        <span style={{ color: 'var(--gold)', marginTop: '0.45rem', flexShrink: 0, fontSize: '0.45rem' }}>◆</span>
                         <span>{resp}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </Section>
 
-      {/* Skills Section */}
-      <Section id="skills" title="Technical Proficiency" dark>
-        <div className="grid md:grid-cols-2 gap-12 max-w-4xl mx-auto">
-          {SKILL_CATEGORIES.map((category, idx) => (
-            <div key={idx} className="border-t border-om-beige pt-6">
-              <h3 className="font-serif text-xl text-om-navy mb-4">
-                {category.title}
-              </h3>
-              <div className="flex flex-wrap gap-x-6 gap-y-2">
-                {category.skills.map((skill, sIdx) => (
-                  <span key={sIdx} className="text-om-charcoal/80 text-sm md:text-base border-b border-transparent hover:border-om-gold transition-colors pb-0.5 cursor-default">
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </Section>
+        <style>{`
+          @media (max-width: 768px) {
+            #experience .glass-card {
+              grid-template-columns: 1fr !important;
+              gap: 1.5rem !important;
+              padding: 1.75rem !important;
+            }
+          }
+        `}</style>
+      </section>
 
-      {/* Projects Section */}
-      <Section id="projects" title="Selected Works">
-        <div className="grid gap-12 max-w-4xl mx-auto">
-          {PROJECTS.map((project, idx) => (
-            <div key={idx} className="group bg-white border border-om-beige p-8 md:p-10 hover:shadow-lg hover:border-om-gold/30 transition-all duration-300">
-              <div className="flex flex-col md:flex-row justify-between md:items-start gap-4 mb-6">
-                <div>
-                  <span className="text-xs font-bold tracking-[0.2em] text-om-gold uppercase mb-2 block">
-                    {project.category}
-                  </span>
-                  <h3 className="font-serif text-2xl md:text-3xl text-om-navy group-hover:text-om-gold transition-colors">
-                    {project.title}
+      {/* ════════════════════════════════════════
+          SKILLS SECTION
+          ════════════════════════════════════════ */}
+      <section
+        id="skills"
+        className="section-reveal"
+        style={{
+          padding: '8rem 0',
+          background: 'var(--bg-2)',
+          position: 'relative',
+          overflow: 'hidden',
+          borderTop: '1px solid rgba(201, 168, 76, 0.08)',
+        }}
+      >
+        <div className="section-bg-number">03</div>
+
+        <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+          {sectionHeading('// 03. TECHNICAL PROFICIENCY', 'Tools & Architectural Capabilities')}
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '2.5rem' }} className="skills-grid">
+            {SKILL_CATEGORIES.map((category, idx) => (
+              <div
+                key={idx}
+                className="glass-card gsap-reveal"
+                style={{
+                  padding: '2.25rem',
+                  borderRadius: '8px',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
+                  <Sparkles size={16} color="var(--gold)" />
+                  <h3 style={{
+                    fontFamily: 'var(--font-display)',
+                    fontSize: '1.1rem',
+                    fontWeight: 700,
+                    color: '#ffffff',
+                    letterSpacing: '0.01em',
+                  }}>
+                    {category.title}
                   </h3>
                 </div>
-                {project.githubUrl && (
-                  <div className="flex gap-2 shrink-0">
-                    <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="text-om-charcoal/40 hover:text-om-navy transition-colors">
-                      <Github size={20} />
-                    </a>
-                  </div>
-                )}
-              </div>
 
-              <ul className="space-y-2 mb-8 text-om-charcoal/80 leading-relaxed">
-                {project.description.map((desc, dIdx) => (
-                  <li key={dIdx}>• {desc}</li>
-                ))}
-              </ul>
-
-              <div className="flex flex-wrap gap-3">
-                {project.techStack.map((tech, tIdx) => (
-                  <span key={tIdx} className="px-3 py-1 bg-om-bg text-om-charcoal text-xs tracking-wider uppercase border border-om-beige">
-                    {tech}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      {/* Resume Section */}
-      <Section id="resume" title="Resume" dark>
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-10">
-            <p className="text-om-charcoal/70 mb-8 max-w-xl mx-auto">
-              A comprehensive overview of my academic background, professional experience, and technical capabilities.
-            </p>
-            <a
-              href="https://drive.google.com/file/d/1RDcy8dcDlOVRArxpikfwSl0RjbbL01iQ/view?usp=sharing"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-3 bg-om-navy text-white px-8 py-4 uppercase tracking-widest text-sm hover:bg-om-charcoal transition-colors min-w-[200px]"
-            >
-              <Download size={16} />
-              Download PDF
-            </a>
-          </div>
-
-          {/* Rendered Resume Document */}
-          <div className="bg-white w-full max-w-[850px] mx-auto shadow-2xl border border-om-beige/30 p-8 md:p-16 text-left transform transition-all hover:scale-[1.01] duration-500">
-            {/* Resume Header */}
-            <div className="text-center border-b-2 border-gray-900 pb-6 mb-6">
-              <h1 className="font-serif text-3xl md:text-4xl text-gray-900 font-bold tracking-tight mb-3">HARSH NARAYAN SINGH</h1>
-              <div className="flex flex-wrap justify-center items-center gap-x-3 gap-y-1 text-sm text-gray-700 font-medium">
-                <span>harshnarayansingh306@gmail.com</span>
-                <span className="hidden md:inline">•</span>
-                <span>+91 9354928723</span>
-                <span className="hidden md:inline">•</span>
-                <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className="hover:text-om-gold underline decoration-gray-400">LinkedIn</a>
-                <span className="hidden md:inline">•</span>
-                <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="hover:text-om-gold underline decoration-gray-400">GitHub</a>
-                <span className="hidden md:inline">•</span>
-                <span>Portfolio</span>
-              </div>
-            </div>
-
-            {/* Professional Summary */}
-            <div className="mb-8">
-              <h2 className="text-sm font-bold text-gray-900 uppercase tracking-widest border-b border-gray-300 mb-3 pb-1">Professional Summary</h2>
-              <p className="text-gray-800 text-sm leading-relaxed text-justify">
-                Backend-focused Software Engineer with experience building production-grade REST services, ML-driven systems,
-                and cloud-native deployments. Strong in backend system design, data structures, CI/CD, and scalable API
-                development.
-              </p>
-            </div>
-
-            {/* Education */}
-            <div className="mb-8">
-              <h2 className="text-sm font-bold text-gray-900 uppercase tracking-widest border-b border-gray-300 mb-3 pb-1">Education</h2>
-              <div className="mb-3">
-                <div className="flex justify-between items-baseline font-semibold text-gray-900 text-sm">
-                  <span>B.Tech in Computer Science Engineering</span>
-                  <span>2022 – 2026</span>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.6rem' }}>
+                  {category.skills.map((skill, sIdx) => (
+                    <span key={sIdx} className="skill-tag">{skill}</span>
+                  ))}
                 </div>
-                <div className="flex justify-between items-baseline text-sm text-gray-700">
-                  <span>Ajay Kumar Garg Engineering College, Ghaziabad</span>
-                  <span className="font-medium">CGPA: 7.5 / 10</span>
-                </div>
-              </div>
-              <div className="flex justify-between items-baseline text-sm text-gray-700 mb-1">
-                <span><span className="font-semibold">Class XII (CBSE)</span> – Maharishi Vidya Mandir, Fatehpur</span>
-                <span>2021 — 88%</span>
-              </div>
-              <div className="flex justify-between items-baseline text-sm text-gray-700">
-                <span><span className="font-semibold">Class X (CBSE)</span> – Maharishi Vidya Mandir, Fatehpur</span>
-                <span>2019 — 94%</span>
-              </div>
-            </div>
-
-            {/* Technical Skills */}
-            <div className="mb-8">
-              <h2 className="text-sm font-bold text-gray-900 uppercase tracking-widest border-b border-gray-300 mb-3 pb-1">Technical Skills</h2>
-              <div className="text-sm text-gray-700 space-y-1.5">
-                <p><span className="font-bold text-gray-900">Backend:</span> Django REST, FastAPI, Flask, REST APIs, JWT, Caching, Pagination</p>
-                <p><span className="font-bold text-gray-900">Machine Learning:</span> XGBoost, Feature Engineering, Model Evaluation</p>
-                <p><span className="font-bold text-gray-900">Databases:</span> PostgreSQL, MySQL, MongoDB, SQLite</p>
-                <p><span className="font-bold text-gray-900">Cloud & DevOps:</span> Azure App Service, Azure Blob Storage, Docker, GitHub Actions, CI/CD, VPS Hosting</p>
-                <p><span className="font-bold text-gray-900">Languages & Tools:</span> Python, C++, Linux, Git, Postman</p>
-              </div>
-            </div>
-
-            {/* Experience */}
-            <div className="mb-8">
-              <h2 className="text-sm font-bold text-gray-900 uppercase tracking-widest border-b border-gray-300 mb-4 pb-1">Experience</h2>
-
-              {/* Job 1 */}
-              <div className="mb-5">
-                <div className="flex flex-col md:flex-row justify-between md:items-baseline mb-1">
-                  <span className="font-bold text-gray-900 text-sm">Software Development Engineer Intern <span className="font-normal text-gray-600">— V4K Entertainment Pvt. Ltd.</span></span>
-                  <span className="text-gray-900 text-sm font-medium whitespace-nowrap">Jun 2025 – Aug 2025</span>
-                </div>
-                <ul className="list-disc list-outside ml-4 text-sm text-gray-700 space-y-1">
-                  <li>Owned and delivered 6 production-grade Django REST APIs with JWT authentication and role-based access control.</li>
-                  <li>Optimized ORM queries and caching, reducing P95 API latency by <span className="font-semibold">20%</span>.</li>
-                  <li>Containerized backend services using Docker and implemented CI pipelines (pytest, flake8).</li>
-                </ul>
-              </div>
-
-              {/* Job 2 */}
-              <div>
-                <div className="flex flex-col md:flex-row justify-between md:items-baseline mb-1">
-                  <span className="font-bold text-gray-900 text-sm">Data Science Intern <span className="font-normal text-gray-600">— CodSoft</span></span>
-                  <span className="text-gray-900 text-sm font-medium whitespace-nowrap">Nov 2024 – Dec 2024</span>
-                </div>
-                <ul className="list-disc list-outside ml-4 text-sm text-gray-700 space-y-1">
-                  <li>Built ML pipelines and deployed inference using Flask-based REST APIs.</li>
-                </ul>
-              </div>
-            </div>
-
-            {/* Projects */}
-            <div className="mb-8">
-              <h2 className="text-sm font-bold text-gray-900 uppercase tracking-widest border-b border-gray-300 mb-4 pb-1">Projects</h2>
-
-              <div className="mb-4">
-                <div className="flex flex-col md:flex-row justify-between md:items-baseline mb-1">
-                  <span className="font-bold text-gray-900 text-sm">Dynamic Pricing Engine</span>
-                  <span className="text-gray-600 text-xs italic">Python, XGBoost, FastAPI, PostgreSQL</span>
-                </div>
-                <ul className="list-disc list-outside ml-4 text-sm text-gray-700 space-y-1">
-                  <li>Built an ML-driven dynamic pricing engine using demand signals and external factors such as weather and events.</li>
-                  <li>Integrated with Clover and Square POS systems, supporting dynamic pricing across <span className="font-semibold">100+ restaurants</span>.</li>
-                  <li>Deployed on Hostinger VPS with CI/CD pipelines enabling automated testing and zero-downtime updates.</li>
-                </ul>
-              </div>
-
-              <div className="mb-4">
-                <div className="flex flex-col md:flex-row justify-between md:items-baseline mb-1">
-                  <span className="font-bold text-gray-900 text-sm">Cloud File Sharing Platform</span>
-                  <span className="text-gray-600 text-xs italic">Django, Azure Blob Storage, Azure App Service</span>
-                </div>
-                <ul className="list-disc list-outside ml-4 text-sm text-gray-700 space-y-1">
-                  <li>Designed a secure file-sharing system with RBAC, encrypted storage, and presigned URLs.</li>
-                  <li>Implemented scalable REST APIs and automated deployments using GitHub Actions.</li>
-                </ul>
-              </div>
-
-              <div>
-                <div className="flex flex-col md:flex-row justify-between md:items-baseline mb-1">
-                  <span className="font-bold text-gray-900 text-sm">AI Code Review Assistant</span>
-                  <span className="text-gray-600 text-xs italic">Python, Django REST</span>
-                </div>
-                <ul className="list-disc list-outside ml-4 text-sm text-gray-700 space-y-1">
-                  <li>Built a backend service to analyze source code and expose REST APIs for automated reviews.</li>
-                </ul>
-              </div>
-            </div>
-
-            {/* DSA & Certs */}
-            <div className="grid md:grid-cols-2 gap-8">
-              <div>
-                <h2 className="text-sm font-bold text-gray-900 uppercase tracking-widest border-b border-gray-300 mb-3 pb-1">DSA & Competitive Programming</h2>
-                <ul className="list-disc list-outside ml-4 text-sm text-gray-700">
-                  <li>Solved 250+ problems on LeetCode, HackerRank, and CodeChef(1741).</li>
-                </ul>
-              </div>
-              <div>
-                <h2 className="text-sm font-bold text-gray-900 uppercase tracking-widest border-b border-gray-300 mb-3 pb-1">Certifications</h2>
-                <ul className="list-disc list-outside ml-4 text-sm text-gray-700">
-                  <li>MongoDB Basics (Udemy), Python Programming (Infosys), Fundamentals of ML – scikit-learn (Infosys)</li>
-                </ul>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </Section>
-
-      {/* Interests Section */}
-      <Section id="interests" title="Interests">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-x-20 md:gap-y-16">
-            {INTERESTS.map((interest, idx) => (
-              <div key={idx} className="flex flex-col items-center gap-4">
-                <div className="w-16 h-16 rounded-full bg-om-bg border border-om-gold flex items-center justify-center text-om-gold font-serif text-xl shadow-sm">
-                  {idx + 1}
-                </div>
-                <span className="text-om-charcoal font-light text-lg max-w-xs">{interest}</span>
               </div>
             ))}
           </div>
         </div>
-      </Section>
 
-      {/* Unified Recruiter Contact Section (Target for Navigation) */}
-      <section id="contact" className="bg-om-navy text-om-bg py-20 px-6 border-t-4 border-om-gold">
-        <div className="max-w-3xl mx-auto text-center">
-          <h3 className="font-serif text-2xl md:text-3xl text-white mb-2">
-            Contact
-          </h3>
-          <p className="text-om-gold text-sm tracking-widest uppercase mb-10">
-            Hiring & Interview Communication
+        <style>{`
+          @media (max-width: 768px) {
+            .skills-grid {
+              grid-template-columns: 1fr !important;
+              gap: 1.5rem !important;
+            }
+          }
+        `}</style>
+      </section>
+
+      {/* ════════════════════════════════════════
+          PROJECTS SECTION
+          ════════════════════════════════════════ */}
+      <section
+        id="projects"
+        className="section-reveal"
+        style={{
+          padding: '8rem 0',
+          background: 'var(--bg)',
+          position: 'relative',
+          overflow: 'hidden',
+          borderTop: '1px solid rgba(201, 168, 76, 0.08)',
+        }}
+      >
+        <div className="section-bg-number">04</div>
+
+        <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+          {sectionHeading('// 04. SELECTED WORKS', 'Production Projects & Systems')}
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
+            {PROJECTS.map((project, idx) => (
+              <div
+                key={idx}
+                className="glass-card gsap-reveal"
+                style={{
+                  padding: '3rem',
+                  borderRadius: '8px',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  transition: 'all 0.4s ease',
+                }}
+              >
+                {/* Large Background Project Index */}
+                <span style={{
+                  position: 'absolute',
+                  top: '1rem',
+                  right: '2rem',
+                  fontFamily: 'var(--font-display)',
+                  fontSize: '4.5rem',
+                  fontWeight: 800,
+                  color: 'rgba(201, 168, 76, 0.06)',
+                  lineHeight: 1,
+                  userSelect: 'none',
+                  pointerEvents: 'none',
+                }}>
+                  {String(idx + 1).padStart(2, '0')}
+                </span>
+
+                <div>
+                  <span style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.65rem',
+                    color: 'var(--gold)',
+                    letterSpacing: '0.2em',
+                    textTransform: 'uppercase',
+                    display: 'block',
+                    marginBottom: '0.5rem',
+                    fontWeight: 600,
+                  }}>
+                    {project.category}
+                  </span>
+
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', marginBottom: '1.25rem' }}>
+                    <h3 style={{
+                      fontFamily: 'var(--font-display)',
+                      fontSize: 'clamp(1.3rem, 2.5vw, 1.85rem)',
+                      fontWeight: 700,
+                      color: '#ffffff',
+                      letterSpacing: '-0.01em',
+                    }}>
+                      {project.title}
+                    </h3>
+                    {project.githubUrl && (
+                      <a
+                        href={project.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        data-cursor-hover
+                        style={{
+                          color: 'var(--gold)',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.4rem',
+                          fontSize: '0.75rem',
+                          fontFamily: 'var(--font-mono)',
+                          padding: '0.4rem 0.8rem',
+                          border: '1px solid rgba(201, 168, 76, 0.3)',
+                          borderRadius: '4px',
+                          background: 'rgba(201, 168, 76, 0.05)',
+                        }}
+                      >
+                        <Github size={15} />
+                        <span>Source</span>
+                      </a>
+                    )}
+                  </div>
+
+                  <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', marginBottom: '1.75rem' }}>
+                    {project.description.map((desc, dIdx) => (
+                      <li
+                        key={dIdx}
+                        style={{
+                          color: 'var(--text-secondary)',
+                          fontSize: '0.92rem',
+                          lineHeight: 1.75,
+                          fontWeight: 300,
+                          display: 'flex',
+                          gap: '0.7rem',
+                        }}
+                      >
+                        <span style={{ color: 'var(--gold)', flexShrink: 0, fontSize: '0.45rem', marginTop: '0.5rem' }}>◆</span>
+                        <span>{desc}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                    {project.techStack.map((tech, tIdx) => (
+                      <span key={tIdx} className="skill-tag">{tech}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════
+          RESUME SECTION
+          ════════════════════════════════════════ */}
+      <section
+        id="resume"
+        className="section-reveal"
+        style={{
+          padding: '8rem 0',
+          background: 'var(--bg-2)',
+          position: 'relative',
+          overflow: 'hidden',
+          borderTop: '1px solid rgba(201, 168, 76, 0.08)',
+        }}
+      >
+        <div className="section-bg-number">05</div>
+
+        <div className="container" style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
+          {sectionHeading('// 05. RESUME', 'Curriculum Vitae & Verified Credentials')}
+
+          <p
+            className="gsap-reveal"
+            style={{
+              color: 'var(--text-secondary)',
+              fontSize: '1.05rem',
+              maxWidth: '520px',
+              margin: '0 auto 2.5rem',
+              lineHeight: 1.8,
+              fontWeight: 300,
+            }}
+          >
+            A comprehensive overview of my academic background, production experience, and technical capabilities.
           </p>
 
-          <div className="bg-om-charcoal/30 border border-om-charcoal/50 p-8 md:p-12 rounded-sm backdrop-blur-sm mb-12">
-            <a
-              href={`mailto:${RECRUITER_EMAIL}`}
-              className="text-xl md:text-3xl font-serif text-white hover:text-om-gold transition-colors border-b-2 border-om-gold/30 hover:border-om-gold pb-1 inline-block mb-8 break-all"
-            >
-              {RECRUITER_EMAIL}
-            </a>
+          <a
+            href={RESUME_URL}
+            download="Harsh_Narayan_Singh_Resume.pdf"
+            className="btn-gold gsap-reveal"
+            style={{ display: 'inline-flex', textDecoration: 'none', marginBottom: '4rem' }}
+            data-cursor-hover
+          >
+            <span>Download Official PDF</span>
+            <span><Download size={15} /></span>
+          </a>
 
-            <p className="text-om-bg/70 text-sm md:text-base mb-2">
-              Please include role name, company name, and tech stack.
-            </p>
-            <p className="text-om-gold/80 text-xs tracking-widest uppercase">
-              Typically responds within 24 hours
-            </p>
+          {/* Rendered Dark Glass Resume Card */}
+          <div
+            className="glass-card gsap-reveal"
+            style={{
+              maxWidth: '860px',
+              margin: '0 auto',
+              padding: '3.5rem',
+              borderRadius: '8px',
+              textAlign: 'left',
+              border: '1px solid rgba(201, 168, 76, 0.2)',
+              boxShadow: '0 25px 60px rgba(0,0,0,0.6)',
+            }}
+          >
+            {/* Header */}
+            <div style={{ textAlign: 'center', borderBottom: '1px solid rgba(201, 168, 76, 0.15)', paddingBottom: '2rem', marginBottom: '2.5rem' }}>
+              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', fontWeight: 800, color: '#ffffff', marginBottom: '0.75rem', letterSpacing: '-0.01em' }}>
+                HARSH NARAYAN SINGH
+              </h2>
+              <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.75rem', color: 'var(--text-secondary)', fontSize: '0.85rem', fontFamily: 'var(--font-mono)' }}>
+                <span>harshnarayansingh306@gmail.com</span>
+                <span style={{ color: 'var(--gold)' }}>•</span>
+                <span>+91 9354928723</span>
+                <span style={{ color: 'var(--gold)' }}>•</span>
+                <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--gold-light)', textDecoration: 'underline' }}>LinkedIn</a>
+                <span style={{ color: 'var(--gold)' }}>•</span>
+                <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--gold-light)', textDecoration: 'underline' }}>GitHub</a>
+              </div>
+            </div>
+
+            {/* Professional Summary */}
+            <div style={{ marginBottom: '2.25rem' }}>
+              <h3 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--gold)', letterSpacing: '0.25em', textTransform: 'uppercase', marginBottom: '0.85rem', borderBottom: '1px solid rgba(201, 168, 76, 0.1)', paddingBottom: '0.4rem', fontWeight: 600 }}>
+                Professional Summary
+              </h3>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.85, fontWeight: 300 }}>
+                Backend-focused Software Engineer with experience building production-grade REST services, ML-driven systems, and cloud-native deployments. Strong in backend system design, data structures, CI/CD, and scalable API development.
+              </p>
+            </div>
+
+            {/* Education */}
+            <div style={{ marginBottom: '2.25rem' }}>
+              <h3 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--gold)', letterSpacing: '0.25em', textTransform: 'uppercase', marginBottom: '0.85rem', borderBottom: '1px solid rgba(201, 168, 76, 0.1)', paddingBottom: '0.4rem', fontWeight: 600 }}>
+                Education
+              </h3>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '0.35rem' }}>
+                <span style={{ color: '#ffffff', fontSize: '0.92rem', fontWeight: 600 }}>B.Tech in Computer Science Engineering (Data Science)</span>
+                <span style={{ color: 'var(--gold)', fontSize: '0.8rem', fontFamily: 'var(--font-mono)' }}>2022 – 2026</span>
+              </div>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
+                Ajay Kumar Garg Engineering College, Ghaziabad <span style={{ color: 'var(--gold-light)', marginLeft: '0.5rem' }}>(CGPA: 7.71 / 10)</span>
+              </p>
+            </div>
+
+            {/* Technical Skills breakdown */}
+            <div style={{ marginBottom: '2.25rem' }}>
+              <h3 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--gold)', letterSpacing: '0.25em', textTransform: 'uppercase', marginBottom: '0.85rem', borderBottom: '1px solid rgba(201, 168, 76, 0.1)', paddingBottom: '0.4rem', fontWeight: 600 }}>
+                Technical Competencies
+              </h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '0.75rem' }}>
+                {[
+                  ['Languages', 'Python, C++, JavaScript, CSS'],
+                  ['Web Technologies', 'HTML, CSS, CSS Preprocessors, MVC, JSON'],
+                  ['AI / ML', 'XGBoost, Scikit-learn, Computer Vision, MediaPipe, Feature Engineering'],
+                  ['Backend', 'Django REST, FastAPI, Flask, REST APIs, JWT, RBAC, Caching'],
+                  ['Cloud & DevOps', 'AWS (EC2), Azure App Service, Docker, GitHub Actions, CI/CD'],
+                  ['Databases', 'PostgreSQL, MySQL, MongoDB, Supabase'],
+                  ['Core CS', 'Data Structures, Algorithms, OOP, DBMS, OS, Computer Networks'],
+                  ['Tools', 'Git, Linux, Postman, Pytest'],
+                ].map(([key, val]) => (
+                  <p key={key} style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', lineHeight: 1.6 }}>
+                    <strong style={{ color: 'var(--gold-light)' }}>{key}: </strong>
+                    {val}
+                  </p>
+                ))}
+              </div>
+            </div>
+
+            {/* DSA & Certs */}
+            <div>
+              <h3 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--gold)', letterSpacing: '0.25em', textTransform: 'uppercase', marginBottom: '0.85rem', borderBottom: '1px solid rgba(201, 168, 76, 0.1)', paddingBottom: '0.4rem', fontWeight: 600 }}>
+                Competitive Programming & Certifications
+              </h3>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', lineHeight: 1.8, marginBottom: '0.4rem' }}>
+                • Solved <strong style={{ color: '#ffffff' }}>250+ algorithmic problems</strong> across LeetCode, HackerRank, and CodeChef (<span style={{ color: 'var(--gold)' }}>CodeChef Rating: 1741</span>).
+              </p>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', lineHeight: 1.8 }}>
+                • MongoDB Basics (Udemy) · Python Programming (Infosys Springboard) · Fundamentals of ML – Scikit-learn (Infosys Springboard).
+              </p>
+            </div>
           </div>
+        </div>
 
-          <div className="flex justify-center gap-8">
-            <a href={`mailto:${GENERAL_EMAIL}`} className="flex flex-col items-center gap-2 text-om-bg/70 hover:text-om-gold transition-colors group">
+        <style>{`
+          @media (max-width: 768px) {
+            #resume .glass-card {
+              padding: 2rem !important;
+            }
+          }
+        `}</style>
+      </section>
+
+      {/* ════════════════════════════════════════
+          CONTACT SECTION
+          ════════════════════════════════════════ */}
+      <section
+        id="contact"
+        className="section-reveal"
+        style={{
+          padding: '9rem 0 7rem',
+          background: 'var(--bg)',
+          position: 'relative',
+          overflow: 'hidden',
+          borderTop: '1px solid rgba(201, 168, 76, 0.12)',
+        }}
+      >
+        <div className="section-bg-number">06</div>
+
+        {/* Glowing radial background */}
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'radial-gradient(ellipse 55% 55% at 50% 55%, rgba(201,168,76,0.08) 0%, transparent 70%)',
+          pointerEvents: 'none',
+        }} />
+
+        <div className="container" style={{ textAlign: 'center', position: 'relative', zIndex: 1 }}>
+          {sectionHeading('// 06. CONTACT', 'Let’s Build Something Exceptional')}
+
+          <p
+            className="gsap-reveal"
+            style={{
+              color: 'var(--text-secondary)',
+              fontSize: '1.05rem',
+              maxWidth: '480px',
+              margin: '0 auto 3rem',
+              lineHeight: 1.8,
+              fontWeight: 300,
+            }}
+          >
+            Open to full-time Software Engineer and Data Science roles. Let’s discuss how I can contribute to your engineering team.
+          </p>
+
+          <a
+            href={`mailto:${RECRUITER_EMAIL}`}
+            className="glow-email gsap-reveal"
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(1.4rem, 4vw, 2.6rem)',
+              fontWeight: 700,
+              display: 'inline-block',
+              marginBottom: '3.5rem',
+              textDecoration: 'none',
+              letterSpacing: '-0.01em',
+            }}
+            data-cursor-hover
+          >
+            {RECRUITER_EMAIL}
+          </a>
+
+          <div
+            className="gsap-reveal"
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              gap: '3.5rem',
+              marginBottom: '2rem',
+            }}
+          >
+            <a href={`mailto:${GENERAL_EMAIL}`} className="magnetic-link" data-cursor-hover>
               <Mail size={24} strokeWidth={1.5} />
-              <span className="text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Email</span>
+              <span>Email</span>
             </a>
-            <a
-              href={GITHUB_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex flex-col items-center gap-2 text-om-bg/70 hover:text-om-gold transition-colors group"
-            >
+            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="magnetic-link" data-cursor-hover>
               <Github size={24} strokeWidth={1.5} />
-              <span className="text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">GitHub</span>
+              <span>GitHub</span>
             </a>
-            <a
-              href={LINKEDIN_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex flex-col items-center gap-2 text-om-bg/70 hover:text-om-gold transition-colors group"
-            >
+            <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className="magnetic-link" data-cursor-hover>
               <Linkedin size={24} strokeWidth={1.5} />
-              <span className="text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">LinkedIn</span>
+              <span>LinkedIn</span>
             </a>
           </div>
+
+          <p
+            className="gsap-reveal"
+            style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.62rem',
+              color: 'var(--text-muted)',
+              letterSpacing: '0.3em',
+              textTransform: 'uppercase',
+            }}
+          >
+            Typically responds within 24 hours
+          </p>
         </div>
       </section>
     </>
   );
-};
-
-export default Home;
+}

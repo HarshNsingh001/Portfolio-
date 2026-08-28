@@ -1,0 +1,440 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap');
+
+/* ==========================================
+   DESIGN TOKENS
+   ========================================== */
+:root {
+  --bg: #050505;
+  --bg-2: #0a0a0a;
+  --bg-3: #111111;
+  --gold: #C9A84C;
+  --gold-light: #E8C87A;
+  --gold-dark: #8B6914;
+  --gold-glow: rgba(201, 168, 76, 0.15);
+  --gold-glow-strong: rgba(201, 168, 76, 0.35);
+  --white: #FFFFFF;
+  --text-primary: #F5F0E8;
+  --text-secondary: #A09070;
+  --text-muted: #504030;
+  --border: rgba(201, 168, 76, 0.12);
+  --border-hover: rgba(201, 168, 76, 0.4);
+  --glass: rgba(255, 255, 255, 0.02);
+  --glass-border: rgba(255, 255, 255, 0.05);
+  --font-sans: 'Space Grotesk', sans-serif;
+  --font-display: 'Syne', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================
+   RESET & BASE
+   ========================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html { scroll-behavior: auto; }
+
+body {
+  background-color: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+a { text-decoration: none; color: inherit; }
+button { cursor: none; border: none; background: none; font-family: inherit; }
+
+/* ==========================================
+   CUSTOM SCROLLBAR
+   ========================================== */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, var(--gold-dark), var(--gold));
+  border-radius: 2px;
+}
+
+/* ==========================================
+   CUSTOM CURSOR
+   ========================================== */
+.cursor-outer {
+  position: fixed;
+  top: 0; left: 0;
+  width: 36px; height: 36px;
+  border: 1px solid rgba(201, 168, 76, 0.6);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s var(--ease-out-expo),
+              height 0.4s var(--ease-out-expo),
+              border-color 0.3s ease,
+              background 0.4s ease;
+  will-change: transform;
+}
+
+.cursor-inner {
+  position: fixed;
+  top: 0; left: 0;
+  width: 5px; height: 5px;
+  background: var(--gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+  box-shadow: 0 0 8px var(--gold);
+}
+
+.cursor-outer.hovered {
+  width: 56px; height: 56px;
+  border-color: var(--gold);
+  background: rgba(201, 168, 76, 0.06);
+}
+
+@media (max-width: 768px) {
+  .cursor-outer, .cursor-inner { display: none; }
+  body { cursor: auto; }
+  button { cursor: pointer; }
+  a { cursor: pointer; }
+}
+
+/* ==========================================
+   TYPOGRAPHY
+   ========================================== */
+.font-display { font-family: var(--font-display); }
+.font-mono { font-family: var(--font-mono); }
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold) 45%, var(--gold-light) 75%, var(--gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-glow {
+  color: var(--gold);
+  text-shadow: 0 0 20px rgba(201, 168, 76, 0.4), 0 0 60px rgba(201, 168, 76, 0.15);
+}
+
+/* ==========================================
+   LAYOUT
+   ========================================== */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* ==========================================
+   GLASS CARD
+   ========================================== */
+.glass-card {
+  background: linear-gradient(135deg, rgba(201, 168, 76, 0.04) 0%, rgba(255,255,255,0.01) 100%);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: border-color 0.4s ease, box-shadow 0.4s ease, background 0.4s ease;
+}
+
+.glass-card:hover {
+  border-color: rgba(201, 168, 76, 0.35);
+  box-shadow: 0 0 40px rgba(201, 168, 76, 0.08), 0 25px 80px rgba(0,0,0,0.6);
+  background: linear-gradient(135deg, rgba(201, 168, 76, 0.07) 0%, rgba(255,255,255,0.01) 100%);
+}
+
+/* ==========================================
+   SECTION LABEL
+   ========================================== */
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.75;
+  display: block;
+}
+
+/* ==========================================
+   GOLD DIVIDER
+   ========================================== */
+.gold-divider {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold), transparent);
+}
+
+/* ==========================================
+   BUTTONS
+   ========================================== */
+.btn-gold {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.9rem 2.2rem;
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 600;
+  position: relative;
+  overflow: hidden;
+  transition: color 0.4s ease;
+}
+
+.btn-gold::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+  transform: translateX(-101%);
+  transition: transform 0.5s var(--ease-out-expo);
+}
+
+.btn-gold:hover::before { transform: translateX(0); }
+.btn-gold:hover { color: #050505; }
+.btn-gold > * { position: relative; z-index: 1; }
+
+/* ==========================================
+   SCROLL REVEAL (initial states for GSAP)
+   ========================================== */
+.gsap-reveal {
+  opacity: 0;
+  transform: translateY(50px);
+}
+
+.gsap-reveal-left {
+  opacity: 0;
+  transform: translateX(-50px);
+}
+
+.gsap-reveal-right {
+  opacity: 0;
+  transform: translateX(50px);
+}
+
+.gsap-reveal-scale {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+/* ==========================================
+   SKILL TAG
+   ========================================== */
+.skill-tag {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  padding: 0.3rem 0.8rem;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  background: rgba(201, 168, 76, 0.02);
+  transition: all 0.3s ease;
+  cursor: default;
+  display: inline-block;
+}
+
+.skill-tag:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(201, 168, 76, 0.07);
+  box-shadow: 0 0 12px rgba(201, 168, 76, 0.1);
+}
+
+/* ==========================================
+   NAV
+   ========================================== */
+.nav-link {
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: color 0.3s ease;
+  position: relative;
+  padding-bottom: 2px;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.35s var(--ease-out-expo);
+}
+
+.nav-link:hover, .nav-link.active {
+  color: var(--gold);
+}
+
+.nav-link:hover::after, .nav-link.active::after {
+  transform: scaleX(1);
+}
+
+/* ==========================================
+   HORIZONTAL RULE
+   ========================================== */
+.section-hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(201,168,76,0.15), transparent);
+}
+
+/* ==========================================
+   LOADING SCREEN
+   ========================================== */
+#loader {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.loader-name {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold) 45%, var(--gold-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.loader-progress {
+  width: 180px;
+  height: 1px;
+  background: rgba(201,168,76,0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.loader-progress-fill {
+  position: absolute;
+  top: 0; left: 0; height: 100%;
+  background: linear-gradient(to right, var(--gold-dark), var(--gold-light));
+  width: 0%;
+  transition: width 0.05s linear;
+}
+
+/* ==========================================
+   HERO NUMBER COUNTER
+   ========================================== */
+.stat-number {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 800;
+  line-height: 1;
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ==========================================
+   SECTION NUMBERS (BIG BG TEXT)
+   ========================================== */
+.section-bg-number {
+  font-family: var(--font-display);
+  font-size: clamp(8rem, 20vw, 18rem);
+  font-weight: 800;
+  color: rgba(201, 168, 76, 0.025);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  position: absolute;
+  right: -2rem;
+  top: -2rem;
+  letter-spacing: -0.05em;
+}
+
+/* ==========================================
+   TIMELINE
+   ========================================== */
+.timeline-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 12px rgba(201, 168, 76, 0.5);
+  flex-shrink: 0;
+}
+
+.timeline-line {
+  width: 1px;
+  flex-grow: 1;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+  min-height: 40px;
+  margin: 4px auto;
+}
+
+/* ==========================================
+   CONTACT GLOW EMAIL
+   ========================================== */
+.glow-email {
+  font-family: var(--font-display);
+  color: var(--text-primary);
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.glow-email:hover {
+  color: var(--gold-light);
+  text-shadow: 0 0 30px rgba(201, 168, 76, 0.4), 0 0 80px rgba(201, 168, 76, 0.15);
+}
+
+/* ==========================================
+   MAGNETIC LINK
+   ========================================== */
+.magnetic-link {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--text-secondary);
+  transition: color 0.3s ease;
+}
+
+.magnetic-link:hover { color: var(--gold); }
+
+.magnetic-link span {
+  font-size: 0.55rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.magnetic-link:hover span {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ==========================================
+   FOOTER
+   ========================================== */
+.footer-text {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}

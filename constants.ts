@@ -7,6 +7,7 @@ export const GITHUB_URL = "https://github.com/HarshNsingh001";
 export const LINKEDIN_URL = "https://www.linkedin.com/in/harshnarayansingh/";
 export const RECRUITER_EMAIL = "harshnarayansingh306@gmail.com";
 export const GENERAL_EMAIL = "harshnarayansingh306@gmail.com";
+export const RESUME_URL = "/Harsh_Narayan_Singh_Resume.pdf";
 
 export const HERO_INTRO = "I build scalable backend systems and machine learning solutions using real-world data. Experienced with SaaS platforms, cloud deployment, and POS system integrations.";
 
@@ -19,38 +20,38 @@ export const ABOUT_TEXT = [
 export const SKILL_CATEGORIES: SkillCategory[] = [
   {
     title: "Programming & Backend",
-    skills: ["Python", "REST APIs", "SQL", "Backend Architecture", "Authentication & OAuth"]
+    skills: ["Python", "C++", "JavaScript", "Django REST", "FastAPI", "Flask", "REST APIs", "JWT", "RBAC", "Caching"]
   },
   {
-    title: "Machine Learning & Data",
-    skills: ["Supervised Learning", "Unsupervised Learning", "Feature Engineering", "Model Evaluation", "Data Cleaning & Pipelines"]
+    title: "Machine Learning & AI",
+    skills: ["XGBoost", "Scikit-learn", "Computer Vision", "MediaPipe", "Feature Engineering", "Model Evaluation"]
   },
   {
-    title: "Cloud & Tools",
-    skills: ["AWS (EC2, S3, IAM)", "Supabase", "Git & GitHub", "Docker (Basics)", "Postman"]
+    title: "Cloud & DevOps",
+    skills: ["AWS (EC2)", "Azure App Service", "Docker", "GitHub Actions", "CI/CD", "Linux", "Git"]
   },
   {
-    title: "POS & SaaS Integrations",
-    skills: ["Square POS", "Clover POS", "Toast POS"]
+    title: "Databases & Core CS",
+    skills: ["PostgreSQL", "MySQL", "MongoDB", "Supabase", "Data Structures", "Algorithms", "OOP", "DBMS", "Operating Systems", "Computer Networks"]
+  },
+  {
+    title: "Web Technologies & Tools",
+    skills: ["HTML", "CSS", "CSS Preprocessors", "MVC", "JSON", "Postman", "Pytest"]
   }
 ];
 
 export const EXPERIENCES: ExperienceItem[] = [
   {
     id: "role-1",
-    role: "Python Developer / ML Engineer",
-    company: "Startup / SaaS",
-    location: "Remote / Hybrid",
-    period: "Present",
+    role: "Python Developer",
+    company: "Dogra Technologies",
+    location: "Remote",
+    period: "Nov 2025 – Aug 2026",
     type: "Professional Experience",
     responsibilities: [
-      "Built and maintained backend REST APIs handling real production data.",
-      "Worked on machine learning workflows involving large-scale order datasets (90,000+ records).",
-      "Designed and optimized data pipelines for analytics and ML experimentation.",
-      "Integrated restaurant POS systems into backend services for order and item synchronization.",
-      "Collaborated closely with business and product teams to convert requirements into scalable technical solutions.",
-      "Focused on system scalability, security, and long-term maintainability.",
-      "Gained hands-on experience with cloud deployment and production system monitoring."
+      "Developed a computer-vision-based virtual clothing try-on system using MediaPipe, applying body landmark detection and pixel-based measurement estimation to improve garment-fit accuracy.",
+      "Built an XGBoost-based dynamic pricing module that used demand and business signals to support data-driven price recommendations.",
+      "Implemented authentication and access-control workflows, including Google Sign-In and role-based access control, and deployed services on AWS EC2 with Supabase/PostgreSQL."
     ]
   },
   {
@@ -58,15 +59,12 @@ export const EXPERIENCES: ExperienceItem[] = [
     role: "Software Development Engineer Intern",
     company: "V4K Entertainment Pvt. Ltd.",
     location: "New Delhi",
-    period: "June 2025 – August 2025",
+    period: "Jun 2025 – Aug 2025",
     type: "Internship",
     responsibilities: [
-      "Owned and delivered 6 production-grade backend APIs using Django REST Framework.",
-      "Implemented JWT-based authentication and role-based access control.",
-      "Optimized ORM queries and applied caching strategies, reducing P95 API latency by ~20%.",
-      "Containerized backend services using Docker for consistent deployments.",
-      "Implemented CI pipelines with automated testing and code quality checks.",
-      "Worked with real production datasets and backend systems."
+      "Built and delivered multiple Django REST APIs with JWT authentication and role-based access control.",
+      "Optimized ORM queries and introduced caching, reducing P95 API latency by 20%.",
+      "Containerized backend services using Docker and set up CI pipelines (pytest, flake8) for automated testing."
     ]
   },
   {
@@ -74,81 +72,45 @@ export const EXPERIENCES: ExperienceItem[] = [
     role: "Data Science Intern",
     company: "CodSoft",
     location: "Remote",
-    period: "November 2024 – December 2024",
+    period: "Nov 2024 – Dec 2024",
     type: "Internship",
     responsibilities: [
-      "Built machine learning pipelines on real datasets.",
-      "Performed feature engineering and model evaluation.",
-      "Deployed ML inference using Flask-based REST APIs.",
-      "Learned how to bridge machine learning models with backend services.",
-      "Focused on practical ML deployment rather than academic-only models."
+      "Built and evaluated machine learning pipelines for prediction tasks, covering data preprocessing, feature engineering, and model selection.",
+      "Deployed trained models via Flask-based REST APIs for inference."
     ]
   }
 ];
 
 export const PROJECTS: Project[] = [
   {
-    title: "Restaurant POS Integration Platform",
-    category: "System Integration",
+    title: "Dynamic Pricing Engine (Multi-Restaurant POS Platform)",
+    category: "Machine Learning & Integration",
     description: [
-      "Unified Square, Clover, and Toast POS systems.",
-      "Centralized orders, items, payments, and customer data.",
-      "Secure OAuth-based integrations.",
-      "Designed for real restaurant operations."
+      "Built an ML-driven dynamic pricing engine using demand signals and external factors such as weather and local events to generate price recommendations.",
+      "Integrated with Clover and Square POS systems to support configurable dynamic pricing across multiple restaurant accounts.",
+      "Deployed on cloud infrastructure with CI/CD pipelines enabling automated testing and reliable rollouts."
     ],
-    techStack: ["Python", "OAuth", "REST API", "PostgreSQL"]
-  },
-  {
-    title: "Machine Learning Order Analytics",
-    category: "Data Science",
-    description: [
-      "ML models trained on 90,000+ order records.",
-      "Feature engineering on item-level and order-level data.",
-      "Sales trend and demand analysis.",
-      "Real-world data handling and cleaning."
-    ],
-    techStack: ["Python", "Pandas", "Scikit-Learn", "Data Pipelines"]
-  },
-  {
-    title: "SaaS Backend Infrastructure",
-    category: "Backend Architecture",
-    description: [
-      "Scalable REST APIs handling high concurrency.",
-      "Authentication and role-based access control.",
-      "Cloud deployment with automated workflows.",
-      "Production-ready architecture designed for scale."
-    ],
-    techStack: ["AWS", "Docker", "API Gateway", "Supabase"]
-  },
-  {
-    title: "Dynamic Pricing Engine",
-    category: "Machine Learning",
-    description: [
-      "Built an ML-driven dynamic pricing engine using demand signals and external factors such as weather and events.",
-      "Integrated with Clover and Square POS systems, supporting dynamic pricing across 100+ restaurants.",
-      "Deployed on Hostinger VPS with CI/CD pipelines enabling automated testing and zero-downtime updates."
-    ],
-    techStack: ["Python", "XGBoost", "FastAPI", "PostgreSQL"],
+    techStack: ["Python", "XGBoost", "FastAPI", "PostgreSQL", "AWS"],
     githubUrl: "https://github.com/HarshNsingh001/AI-Pricing"
   },
   {
-    title: "Cloud File Sharing Platform",
-    category: "Cloud Engineering",
+    title: "Virtual Clothing Try-On System",
+    category: "Computer Vision",
     description: [
-      "Designed a secure file-sharing system with RBAC, encrypted storage, and presigned URLs.",
-      "Implemented scalable REST APIs and automated deployments using GitHub Actions."
+      "Designed a real-time computer vision pipeline using MediaPipe for body landmark detection and pixel-to-real-world measurement estimation.",
+      "Calculated body proportions from detected landmarks to improve clothing-fit accuracy; deployed the application on AWS for real-time inference."
     ],
-    techStack: ["Django", "Azure Blob Storage", "Azure App Service"],
-    githubUrl: "https://github.com/HarshNsingh001/Cloud-File-Sharing-Platform-"
+    techStack: ["Python", "MediaPipe", "Computer Vision", "AWS"]
   },
   {
-    title: "AI Code Review Assistant",
-    category: "AI Services",
+    title: "HealthCloud: IoT-Enabled Cloud Platform for Wearable Health Monitoring",
+    category: "IoT & Cloud",
     description: [
-      "Built a backend service to analyze source code and expose REST APIs for automated reviews."
+      "Developed a three-tier health monitoring platform with a Spring Boot backend, React dashboard, and Capacitor-based Android application.",
+      "Integrated Bluetooth Low Energy (BLE) smartwatch communication and GPS-based location tracking, with an automated alert engine for abnormal health readings.",
+      "Implemented JWT authentication, role-based access control, and multi-institution data isolation for secure multi-tenant usage."
     ],
-    techStack: ["Python", "Django REST"],
-    githubUrl: "https://github.com/HarshNsingh001/ai_code_review"
+    techStack: ["Spring Boot", "React 19", "Capacitor Android", "Supabase PostgreSQL", "BLE"]
   }
 ];
 
