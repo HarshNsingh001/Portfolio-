@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Palette } from 'lucide-react';
+import React, { useState } from 'react';
+import { Palette, Check } from 'lucide-react';
 
 export interface ThemeConfig {
   id: string;
   name: string;
+  category: string;
   dotColor: string;
   gold: string;
   goldLight: string;
@@ -14,64 +15,70 @@ export interface ThemeConfig {
 
 export const THEMES: ThemeConfig[] = [
   {
+    id: 'slate',
+    name: 'Apple Space Slate',
+    category: 'Silicon Valley Pro',
+    dotColor: '#60A5FA',
+    gold: '#60A5FA',
+    goldLight: '#93C5FD',
+    goldDark: '#1D4ED8',
+    lightColor1: '#93C5FD',
+    lightColor2: '#3B82F6',
+  },
+  {
+    id: 'cobalt',
+    name: 'Stripe Indigo',
+    category: 'Fintech & Infra',
+    dotColor: '#6366F1',
+    gold: '#6366F1',
+    goldLight: '#A5B4FC',
+    goldDark: '#3730A3',
+    lightColor1: '#818CF8',
+    lightColor2: '#4F46E5',
+  },
+  {
+    id: 'platinum',
+    name: 'OpenAI Platinum',
+    category: 'AI Research Lab',
+    dotColor: '#E2D9C8',
+    gold: '#D4C8B5',
+    goldLight: '#F5EFE6',
+    goldDark: '#8C7F6B',
+    lightColor1: '#F5EFE6',
+    lightColor2: '#D4C8B5',
+  },
+  {
+    id: 'chrome',
+    name: 'Vercel Monochrome',
+    category: 'Minimalist Engineering',
+    dotColor: '#F8FAFC',
+    gold: '#E2E8F0',
+    goldLight: '#FFFFFF',
+    goldDark: '#475569',
+    lightColor1: '#FFFFFF',
+    lightColor2: '#94A3B8',
+  },
+  {
+    id: 'sage',
+    name: 'Deep Forest Sage',
+    category: 'Enterprise Backend',
+    dotColor: '#34D399',
+    gold: '#10B981',
+    goldLight: '#6EE7B7',
+    goldDark: '#065F46',
+    lightColor1: '#6EE7B7',
+    lightColor2: '#059669',
+  },
+  {
     id: 'gold',
-    name: 'Black & Gold',
+    name: 'Royal Black & Gold',
+    category: 'Executive Luxury',
     dotColor: '#C9A84C',
     gold: '#C9A84C',
     goldLight: '#E8C87A',
     goldDark: '#8B6914',
     lightColor1: '#FFE090',
     lightColor2: '#C9A84C',
-  },
-  {
-    id: 'cyan',
-    name: 'Linear Obsidian',
-    dotColor: '#38BDF8',
-    gold: '#38BDF8',
-    goldLight: '#818CF8',
-    goldDark: '#1E40AF',
-    lightColor1: '#38BDF8',
-    lightColor2: '#818CF8',
-  },
-  {
-    id: 'emerald',
-    name: 'Cyber Emerald',
-    dotColor: '#10B981',
-    gold: '#10B981',
-    goldLight: '#34D399',
-    goldDark: '#047857',
-    lightColor1: '#00FF87',
-    lightColor2: '#10B981',
-  },
-  {
-    id: 'purple',
-    name: 'Deep Nebula',
-    dotColor: '#A855F7',
-    gold: '#A855F7',
-    goldLight: '#EC4899',
-    goldDark: '#6B21A8',
-    lightColor1: '#F43F5E',
-    lightColor2: '#A855F7',
-  },
-  {
-    id: 'orange',
-    name: 'Solar Flare',
-    dotColor: '#FF6B00',
-    gold: '#FF6B00',
-    goldLight: '#FFA133',
-    goldDark: '#B43B00',
-    lightColor1: '#FF8000',
-    lightColor2: '#FFA133',
-  },
-  {
-    id: 'ice',
-    name: 'Frost Titanium',
-    dotColor: '#93C5FD',
-    gold: '#93C5FD',
-    goldLight: '#E0F2FE',
-    goldDark: '#3B82F6',
-    lightColor1: '#93C5FD',
-    lightColor2: '#E0F2FE',
   },
 ];
 
@@ -100,33 +107,51 @@ export default function ThemeSwitcher({ currentTheme, onSelectTheme }: ThemeSwit
       {isOpen && (
         <div
           style={{
-            background: 'rgba(10, 12, 16, 0.92)',
-            backdropFilter: 'blur(25px)',
-            WebkitBackdropFilter: 'blur(25px)',
-            border: '1px solid var(--border)',
+            background: 'rgba(8, 10, 14, 0.94)',
+            backdropFilter: 'blur(30px)',
+            WebkitBackdropFilter: 'blur(30px)',
+            border: '1px solid var(--border-hover)',
             borderRadius: '16px',
-            padding: '1rem 1.25rem',
+            padding: '1.25rem',
             display: 'flex',
             flexDirection: 'column',
             gap: '0.5rem',
-            boxShadow: '0 20px 50px rgba(0,0,0,0.8), 0 0 30px var(--gold-glow)',
-            minWidth: '180px',
+            boxShadow: '0 25px 60px rgba(0,0,0,0.85), 0 0 35px var(--gold-glow)',
+            minWidth: '240px',
             animation: 'themeFadeIn 0.25s ease-out',
           }}
         >
           <div
             style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.62rem',
-              letterSpacing: '0.15em',
-              textTransform: 'uppercase',
-              color: 'var(--text-muted)',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              paddingBottom: '0.5rem',
+              borderBottom: '1px solid rgba(255,255,255,0.08)',
               marginBottom: '0.25rem',
-              paddingBottom: '0.35rem',
-              borderBottom: '1px solid rgba(255,255,255,0.06)',
             }}
           >
-            Switch Theme
+            <span
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.65rem',
+                letterSpacing: '0.15em',
+                textTransform: 'uppercase',
+                color: 'var(--gold-light)',
+                fontWeight: 600,
+              }}
+            >
+              Professional Palettes
+            </span>
+            <span
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.55rem',
+                color: 'var(--text-muted)',
+              }}
+            >
+              6 STYLES
+            </span>
           </div>
 
           {THEMES.map((theme) => {
@@ -141,13 +166,13 @@ export default function ThemeSwitcher({ currentTheme, onSelectTheme }: ThemeSwit
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '0.75rem',
-                  padding: '0.45rem 0.6rem',
-                  borderRadius: '8px',
-                  background: isSelected ? 'rgba(255,255,255,0.06)' : 'transparent',
+                  justifyContent: 'space-between',
+                  padding: '0.6rem 0.75rem',
+                  borderRadius: '10px',
+                  background: isSelected ? 'rgba(255,255,255,0.08)' : 'transparent',
                   border: isSelected ? '1px solid var(--border-hover)' : '1px solid transparent',
                   color: isSelected ? 'var(--gold-light)' : 'var(--text-secondary)',
-                  fontSize: '0.8rem',
+                  fontSize: '0.82rem',
                   fontFamily: 'var(--font-sans)',
                   fontWeight: isSelected ? 600 : 400,
                   transition: 'all 0.2s ease',
@@ -156,17 +181,28 @@ export default function ThemeSwitcher({ currentTheme, onSelectTheme }: ThemeSwit
                 }}
                 data-cursor-hover
               >
-                <span
-                  style={{
-                    width: '10px',
-                    height: '10px',
-                    borderRadius: '50%',
-                    background: theme.dotColor,
-                    boxShadow: isSelected ? `0 0 10px ${theme.dotColor}` : 'none',
-                    flexShrink: 0,
-                  }}
-                />
-                <span>{theme.name}</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <span
+                    style={{
+                      width: '12px',
+                      height: '12px',
+                      borderRadius: '50%',
+                      background: theme.dotColor,
+                      boxShadow: isSelected ? `0 0 12px ${theme.dotColor}` : 'none',
+                      flexShrink: 0,
+                    }}
+                  />
+                  <div>
+                    <div style={{ color: isSelected ? '#ffffff' : 'var(--text-primary)', fontSize: '0.82rem', fontWeight: 500 }}>
+                      {theme.name}
+                    </div>
+                    <div style={{ color: 'var(--text-muted)', fontSize: '0.62rem', fontFamily: 'var(--font-mono)' }}>
+                      {theme.category}
+                    </div>
+                  </div>
+                </div>
+
+                {isSelected && <Check size={14} color="var(--gold-light)" />}
               </button>
             );
           })}
@@ -179,32 +215,32 @@ export default function ThemeSwitcher({ currentTheme, onSelectTheme }: ThemeSwit
         style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '0.6rem',
-          padding: '0.7rem 1.2rem',
+          gap: '0.65rem',
+          padding: '0.75rem 1.35rem',
           borderRadius: '9999px',
-          background: 'rgba(12, 14, 18, 0.85)',
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
+          background: 'rgba(10, 12, 16, 0.85)',
+          backdropFilter: 'blur(25px)',
+          WebkitBackdropFilter: 'blur(25px)',
           border: '1px solid var(--border)',
           color: 'var(--gold)',
           fontFamily: 'var(--font-mono)',
           fontSize: '0.68rem',
-          letterSpacing: '0.1em',
+          letterSpacing: '0.12em',
           textTransform: 'uppercase',
           fontWeight: 600,
-          boxShadow: '0 10px 30px rgba(0,0,0,0.6), 0 0 20px var(--gold-glow)',
+          boxShadow: '0 12px 35px rgba(0,0,0,0.7), 0 0 25px var(--gold-glow)',
           transition: 'all 0.3s ease',
         }}
         data-cursor-hover
         title="Change Portfolio Color Theme"
       >
         <Palette size={16} color="var(--gold)" />
-        <span>Theme</span>
+        <span>Palette</span>
       </button>
 
       <style>{`
         @keyframes themeFadeIn {
-          from { opacity: 0; transform: translateY(10px) scale(0.95); }
+          from { opacity: 0; transform: translateY(12px) scale(0.95); }
           to { opacity: 1; transform: translateY(0) scale(1); }
         }
       `}</style>
