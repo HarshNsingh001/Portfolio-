@@ -157,36 +157,34 @@ button { cursor: none; border: none; background: none; font-family: inherit; }
 }
 
 /* ==========================================
-   GLASS CARD (GLOSSY TRANSLUCENT)
+   GLASS CARD
    ========================================== */
 .glass-card {
-  background: linear-gradient(135deg, rgba(147, 197, 253, 0.08) 0%, rgba(255, 255, 255, 0.02) 35%, rgba(6, 8, 12, 0.45) 100%);
+  background: linear-gradient(135deg, rgba(147, 197, 253, 0.04) 0%, rgba(255,255,255,0.01) 100%);
   border: 1px solid var(--border);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   transition: border-color 0.4s ease, box-shadow 0.4s ease, background 0.4s ease;
 }
 
 .glass-card:hover {
-  border-color: var(--border-hover);
-  box-shadow: 0 0 35px var(--gold-glow), 0 25px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.15);
-  background: linear-gradient(135deg, rgba(147, 197, 253, 0.12) 0%, rgba(255, 255, 255, 0.04) 35%, rgba(6, 8, 12, 0.45) 100%);
+  border-color: rgba(147, 197, 253, 0.4);
+  box-shadow: 0 0 40px rgba(147, 197, 253, 0.1), 0 25px 80px rgba(0,0,0,0.6);
+  background: linear-gradient(135deg, rgba(147, 197, 253, 0.07) 0%, rgba(255,255,255,0.01) 100%);
 }
 
 .glass-card-gold {
-  background: linear-gradient(135deg, rgba(147, 197, 253, 0.09) 0%, rgba(255, 255, 255, 0.03) 35%, rgba(6, 8, 12, 0.45) 100%);
+  background: linear-gradient(135deg, rgba(147, 197, 253, 0.05) 0%, rgba(255,255,255,0.01) 100%);
   border: 1px solid var(--border);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   transition: border-color 0.4s ease, box-shadow 0.4s ease, background 0.4s ease;
 }
 
 .glass-card-gold:hover {
   border-color: var(--border-hover);
-  box-shadow: 0 0 30px var(--gold-glow), 0 20px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
-  background: linear-gradient(135deg, rgba(147, 197, 253, 0.14) 0%, rgba(255, 255, 255, 0.05) 35%, rgba(6, 8, 12, 0.45) 100%);
+  box-shadow: 0 0 30px var(--gold-glow), 0 20px 60px rgba(0,0,0,0.5);
+  background: linear-gradient(135deg, rgba(147, 197, 253, 0.08) 0%, rgba(255,255,255,0.01) 100%);
 }
 
 /* ==========================================
