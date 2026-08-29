@@ -375,9 +375,9 @@ export default function Home() {
         className="section-reveal"
         style={{
           padding: '8rem 0',
-          background: 'rgba(13, 17, 24, 0.65)',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
+          background: 'rgba(6, 8, 12, 0.4)',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
           position: 'relative',
           overflow: 'hidden',
           borderTop: '1px solid rgba(147, 197, 253, 0.08)',
@@ -461,9 +461,9 @@ export default function Home() {
         className="section-reveal"
         style={{
           padding: '8rem 0',
-          background: 'rgba(6, 8, 12, 0.6)',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
+          background: 'rgba(6, 8, 12, 0.35)',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
           position: 'relative',
           overflow: 'hidden',
           borderTop: '1px solid rgba(147, 197, 253, 0.08)',
@@ -579,9 +579,9 @@ export default function Home() {
         className="section-reveal"
         style={{
           padding: '8rem 0',
-          background: 'rgba(13, 17, 24, 0.65)',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
+          background: 'rgba(6, 8, 12, 0.4)',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
           position: 'relative',
           overflow: 'hidden',
           borderTop: '1px solid rgba(147, 197, 253, 0.08)',
@@ -643,9 +643,9 @@ export default function Home() {
         className="section-reveal"
         style={{
           padding: '8rem 0',
-          background: 'rgba(6, 8, 12, 0.6)',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
+          background: 'rgba(6, 8, 12, 0.35)',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
           position: 'relative',
           overflow: 'hidden',
           borderTop: '1px solid rgba(147, 197, 253, 0.08)',
@@ -773,9 +773,9 @@ export default function Home() {
         className="section-reveal"
         style={{
           padding: '8rem 0',
-          background: 'rgba(13, 17, 24, 0.65)',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
+          background: 'rgba(6, 8, 12, 0.4)',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
           position: 'relative',
           overflow: 'hidden',
           borderTop: '1px solid rgba(147, 197, 253, 0.08)',
@@ -920,9 +920,9 @@ export default function Home() {
         className="section-reveal"
         style={{
           padding: '9rem 0 7rem',
-          background: 'rgba(6, 8, 12, 0.75)',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
+          background: 'rgba(6, 8, 12, 0.55)',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
           position: 'relative',
           overflow: 'hidden',
           borderTop: '1px solid rgba(147, 197, 253, 0.12)',

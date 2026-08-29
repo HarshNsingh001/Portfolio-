@@ -4,7 +4,7 @@ import { Points, PointMaterial } from '@react-three/drei';
 import * as THREE from 'three';
 
 /* ─────────────────────────────────────────
-   ORBITAL RING COMPONENT
+   GLOSSY METALLIC ORBITAL RING COMPONENT
    ───────────────────────────────────────── */
 interface RingProps {
   rotationAxis: THREE.Vector3;
@@ -12,12 +12,23 @@ interface RingProps {
   radius: number;
   tubeRadius: number;
   color: string;
+  emissiveColor: string;
   opacity: number;
   offsetAngle?: number;
   phase: number;
 }
 
-function MorphingRing({ rotationAxis, speed, radius, tubeRadius, color, opacity, offsetAngle = 0, phase }: RingProps) {
+function MorphingRing({
+  rotationAxis,
+  speed,
+  radius,
+  tubeRadius,
+  color,
+  emissiveColor,
+  opacity,
+  offsetAngle = 0,
+  phase
+}: RingProps) {
   const meshRef = useRef<THREE.Mesh>(null);
   const baseQuaternion = useMemo(() => {
     const q = new THREE.Quaternion();
@@ -32,22 +43,23 @@ function MorphingRing({ rotationAxis, speed, radius, tubeRadius, color, opacity,
     spinQ.setFromAxisAngle(rotationAxis.clone().normalize(), t);
     meshRef.current.quaternion.multiplyQuaternions(spinQ, baseQuaternion);
 
-    // Dynamic wave expansion based on phase
-    const pulse = 1 + Math.sin(clock.getElapsedTime() * 1.5 + phase) * 0.04;
+    // Subtle rhythmic breath
+    const pulse = 1 + Math.sin(clock.getElapsedTime() * 1.5 + phase) * 0.03;
     meshRef.current.scale.setScalar(pulse);
   });
 
-  const geometry = useMemo(() => new THREE.TorusGeometry(radius, tubeRadius, 32, 180), [radius, tubeRadius]);
+  const geometry = useMemo(() => new THREE.TorusGeometry(radius, tubeRadius, 32, 220), [radius, tubeRadius]);
 
   return (
     <mesh ref={meshRef} geometry={geometry}>
       <meshStandardMaterial
         color={color}
-        metalness={0.95}
-        roughness={0.1}
+        emissive={emissiveColor}
+        emissiveIntensity={0.25}
+        metalness={0.96}
+        roughness={0.06}
         transparent
         opacity={opacity}
-        wireframe={false}
       />
     </mesh>
   );
@@ -58,41 +70,30 @@ function MorphingRing({ rotationAxis, speed, radius, tubeRadius, color, opacity,
    ───────────────────────────────────────── */
 function QuantumSwarm({ totalProgress }: { totalProgress: number }) {
   const pointsRef = useRef<THREE.Points>(null);
-  const count = 450;
+  const count = 480;
 
-  const { originalPositions, positions } = useMemo(() => {
-    const orig = new Float32Array(count * 3);
+  const { positions } = useMemo(() => {
     const curr = new Float32Array(count * 3);
 
     for (let i = 0; i < count; i++) {
-      // Shell radii with mathematical spiral
-      const r = 1.2 + Math.random() * 2.2;
+      const r = 1.3 + Math.random() * 2.3;
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(2 * Math.random() - 1);
 
-      const x = r * Math.sin(phi) * Math.cos(theta);
-      const y = r * Math.sin(phi) * Math.sin(theta);
-      const z = r * Math.cos(phi);
-
-      orig[i * 3] = x;
-      orig[i * 3 + 1] = y;
-      orig[i * 3 + 2] = z;
-
-      curr[i * 3] = x;
-      curr[i * 3 + 1] = y;
-      curr[i * 3 + 2] = z;
+      curr[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+      curr[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+      curr[i * 3 + 2] = r * Math.cos(phi);
     }
-    return { originalPositions: orig, positions: curr };
+    return { positions: curr };
   }, []);
 
   useFrame(({ clock }) => {
     if (!pointsRef.current) return;
     const t = clock.getElapsedTime();
-    pointsRef.current.rotation.y = t * 0.04 + totalProgress * Math.PI;
-    pointsRef.current.rotation.x = t * 0.02 + Math.sin(totalProgress * Math.PI * 2) * 0.2;
+    pointsRef.current.rotation.y = t * 0.05 + totalProgress * Math.PI;
+    pointsRef.current.rotation.x = t * 0.025 + Math.sin(totalProgress * Math.PI * 2) * 0.2;
 
-    // Pulse scale dynamically
-    const dynamicScale = 1 + Math.sin(t * 1.2) * 0.05 + Math.sin(totalProgress * Math.PI * 4) * 0.15;
+    const dynamicScale = 1 + Math.sin(t * 1.2) * 0.05 + Math.sin(totalProgress * Math.PI * 4) * 0.12;
     pointsRef.current.scale.setScalar(dynamicScale);
   });
 
@@ -101,17 +102,17 @@ function QuantumSwarm({ totalProgress }: { totalProgress: number }) {
       <PointMaterial
         transparent
         color="#E0F2FE"
-        size={0.028}
+        size={0.032}
         sizeAttenuation
         depthWrite={false}
-        opacity={0.8}
+        opacity={0.88}
       />
     </Points>
   );
 }
 
 /* ─────────────────────────────────────────
-   CORE WIREFRAME ICOSAHEDRON
+   GLOWING WIREFRAME CORE
    ───────────────────────────────────────── */
 function CentralCore({ totalProgress }: { totalProgress: number }) {
   const meshRef = useRef<THREE.Mesh>(null);
@@ -119,12 +120,11 @@ function CentralCore({ totalProgress }: { totalProgress: number }) {
   useFrame(({ clock }) => {
     if (!meshRef.current) return;
     const t = clock.getElapsedTime();
-    meshRef.current.rotation.y = t * 0.15;
-    meshRef.current.rotation.x = t * 0.09;
-    meshRef.current.rotation.z = t * 0.05;
+    meshRef.current.rotation.y = t * 0.18;
+    meshRef.current.rotation.x = t * 0.1;
+    meshRef.current.rotation.z = t * 0.06;
 
-    // Breath effect
-    const s = 0.55 + Math.sin(t * 2) * 0.04 + (totalProgress > 0.85 ? 0.2 : 0);
+    const s = 0.58 + Math.sin(t * 2) * 0.04 + (totalProgress > 0.85 ? 0.2 : 0);
     meshRef.current.scale.setScalar(s);
   });
 
@@ -133,11 +133,13 @@ function CentralCore({ totalProgress }: { totalProgress: number }) {
       <icosahedronGeometry args={[1, 2]} />
       <meshStandardMaterial
         color="#93C5FD"
+        emissive="#3B82F6"
+        emissiveIntensity={0.3}
         wireframe
         transparent
-        opacity={0.35}
+        opacity={0.45}
         metalness={1}
-        roughness={0.1}
+        roughness={0.05}
       />
     </mesh>
   );
@@ -148,33 +150,33 @@ function CentralCore({ totalProgress }: { totalProgress: number }) {
    ───────────────────────────────────────── */
 function DeepStardust() {
   const ref = useRef<THREE.Points>(null);
-  const count = 750;
+  const count = 800;
 
   const positions = useMemo(() => {
     const arr = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
-      arr[i * 3] = (Math.random() - 0.5) * 22;
-      arr[i * 3 + 1] = (Math.random() - 0.5) * 22;
-      arr[i * 3 + 2] = (Math.random() - 0.5) * 16 - 2;
+      arr[i * 3] = (Math.random() - 0.5) * 24;
+      arr[i * 3 + 1] = (Math.random() - 0.5) * 24;
+      arr[i * 3 + 2] = (Math.random() - 0.5) * 18 - 2;
     }
     return arr;
   }, []);
 
   useFrame(({ clock }) => {
     if (!ref.current) return;
-    ref.current.rotation.y = clock.getElapsedTime() * 0.008;
-    ref.current.rotation.x = clock.getElapsedTime() * 0.004;
+    ref.current.rotation.y = clock.getElapsedTime() * 0.01;
+    ref.current.rotation.x = clock.getElapsedTime() * 0.005;
   });
 
   return (
     <Points ref={ref} positions={positions} stride={3} frustumCulled={false}>
       <PointMaterial
         transparent
-        color="#93C5FD"
-        size={0.014}
+        color="#BAE6FD"
+        size={0.018}
         sizeAttenuation
         depthWrite={false}
-        opacity={0.3}
+        opacity={0.45}
       />
     </Points>
   );
@@ -184,88 +186,69 @@ function DeepStardust() {
    MAIN 3D KINETIC TRAVELER SCENE
    ───────────────────────────────────────── */
 interface JourneySceneProps {
-  totalProgress: number; // 0.0 (top) to 1.0 (bottom)
+  totalProgress: number;
 }
 
 function JourneyScene({ totalProgress }: JourneySceneProps) {
   const groupRef = useRef<THREE.Group>(null);
   const targetPos = useRef(new THREE.Vector3(1.7, 0, 0));
-  const targetRot = useRef(new THREE.Euler(0, 0, 0));
-  const targetScale = useRef(1.0);
 
-  useFrame(({ clock, mouse }) => {
+  useFrame(({ mouse }) => {
     if (!groupRef.current) return;
-
-    // SECTION COORDINATE MAPPING:
-    // 0.00 - 0.15 (Hero): Right side hero stage
-    // 0.15 - 0.35 (About): Moves to Left background, expands
-    // 0.35 - 0.55 (Experience): Shifts to Right timeline side
-    // 0.55 - 0.72 (Skills): Deep center background
-    // 0.72 - 0.88 (Projects): Left side balance
-    // 0.88 - 1.00 (Contact): Center bottom glowing beacon
 
     let destX = 1.7;
     let destY = 0;
     let destZ = 0;
-    let scaleVal = 1.0;
-    let rotX = 0;
-    let rotY = 0;
-    let rotZ = 0;
+    let scaleVal = 1.05;
 
     if (totalProgress <= 0.15) {
-      // Hero stage
+      // Hero stage (Right side)
       destX = 1.7;
       destY = 0;
       destZ = 0;
-      scaleVal = 1.0;
+      scaleVal = 1.05;
     } else if (totalProgress <= 0.35) {
       // About stage (Left side)
       const p = (totalProgress - 0.15) / 0.20;
       destX = THREE.MathUtils.lerp(1.7, -1.8, p);
       destY = THREE.MathUtils.lerp(0, 0.2, p);
-      destZ = THREE.MathUtils.lerp(0, -0.4, p);
-      scaleVal = THREE.MathUtils.lerp(1.0, 1.15, p);
-      rotY = p * Math.PI * 0.5;
+      destZ = THREE.MathUtils.lerp(0, -0.2, p);
+      scaleVal = THREE.MathUtils.lerp(1.05, 1.2, p);
     } else if (totalProgress <= 0.55) {
       // Experience stage (Right side timeline)
       const p = (totalProgress - 0.35) / 0.20;
       destX = THREE.MathUtils.lerp(-1.8, 1.8, p);
       destY = THREE.MathUtils.lerp(0.2, -0.2, p);
-      destZ = THREE.MathUtils.lerp(-0.4, 0.2, p);
-      scaleVal = THREE.MathUtils.lerp(1.15, 0.95, p);
-      rotX = p * Math.PI * 0.4;
+      destZ = THREE.MathUtils.lerp(-0.2, 0.2, p);
+      scaleVal = THREE.MathUtils.lerp(1.2, 1.05, p);
     } else if (totalProgress <= 0.72) {
-      // Skills stage (Center deep)
+      // Skills stage (Center background between cards)
       const p = (totalProgress - 0.55) / 0.17;
       destX = THREE.MathUtils.lerp(1.8, 0, p);
       destY = THREE.MathUtils.lerp(-0.2, 0.1, p);
-      destZ = THREE.MathUtils.lerp(0.2, -1.2, p);
-      scaleVal = THREE.MathUtils.lerp(0.95, 1.35, p);
-      rotZ = p * Math.PI * 0.3;
+      destZ = THREE.MathUtils.lerp(0.2, -0.6, p);
+      scaleVal = THREE.MathUtils.lerp(1.05, 1.4, p);
     } else if (totalProgress <= 0.88) {
       // Projects stage (Left float)
       const p = (totalProgress - 0.72) / 0.16;
       destX = THREE.MathUtils.lerp(0, -1.9, p);
       destY = THREE.MathUtils.lerp(0.1, -0.1, p);
-      destZ = THREE.MathUtils.lerp(-1.2, 0, p);
-      scaleVal = THREE.MathUtils.lerp(1.35, 1.05, p);
-      rotY = p * Math.PI * 0.6;
+      destZ = THREE.MathUtils.lerp(-0.6, 0.1, p);
+      scaleVal = THREE.MathUtils.lerp(1.4, 1.15, p);
     } else {
       // Contact & Resume stage (Center glowing core)
       const p = (totalProgress - 0.88) / 0.12;
       destX = THREE.MathUtils.lerp(-1.9, 0, p);
       destY = THREE.MathUtils.lerp(-0.1, -0.4, p);
-      destZ = THREE.MathUtils.lerp(0, 0.3, p);
-      scaleVal = THREE.MathUtils.lerp(1.05, 1.25, p);
+      destZ = THREE.MathUtils.lerp(0.1, 0.4, p);
+      scaleVal = THREE.MathUtils.lerp(1.15, 1.3, p);
     }
 
     targetPos.current.set(destX, destY, destZ);
 
-    // Mouse parallax offsets
-    const mouseParallaxX = mouse.x * 0.35;
-    const mouseParallaxY = -mouse.y * 0.25;
+    const mouseParallaxX = mouse.x * 0.4;
+    const mouseParallaxY = -mouse.y * 0.3;
 
-    // Smooth LERP movement (super buttery smooth)
     groupRef.current.position.x += (targetPos.current.x + mouseParallaxX - groupRef.current.position.x) * 0.06;
     groupRef.current.position.y += (targetPos.current.y + mouseParallaxY - groupRef.current.position.y) * 0.06;
     groupRef.current.position.z += (targetPos.current.z - groupRef.current.position.z) * 0.06;
@@ -277,49 +260,54 @@ function JourneyScene({ totalProgress }: JourneySceneProps) {
     groupRef.current.rotation.y += 0.003;
   });
 
+  const ICE_POLAR = '#FFFFFF';
   const ICE_LIGHT = '#E0F2FE';
   const ICE_MAIN = '#93C5FD';
   const ICE_DARK = '#3B82F6';
 
   return (
     <group ref={groupRef} position={[1.7, 0, 0]}>
-      {/* 4 Titanium Orbital Rings */}
+      {/* 4 Glossy Titanium Orbital Rings (Enhanced Visibility & Tube Radius) */}
       <MorphingRing
         rotationAxis={new THREE.Vector3(0, 1, 0)}
         speed={0.12}
-        radius={2.1}
-        tubeRadius={0.009}
-        color={ICE_LIGHT}
-        opacity={0.95}
+        radius={2.15}
+        tubeRadius={0.013}
+        color={ICE_POLAR}
+        emissiveColor={ICE_LIGHT}
+        opacity={1.0}
         phase={0}
       />
       <MorphingRing
         rotationAxis={new THREE.Vector3(1, 0, 0)}
         speed={0.18}
-        radius={1.88}
-        tubeRadius={0.011}
-        color={ICE_MAIN}
-        opacity={0.9}
+        radius={1.92}
+        tubeRadius={0.015}
+        color={ICE_LIGHT}
+        emissiveColor={ICE_MAIN}
+        opacity={0.98}
         offsetAngle={Math.PI / 3}
         phase={1}
       />
       <MorphingRing
         rotationAxis={new THREE.Vector3(1, 1, 0)}
         speed={0.24}
-        radius={1.62}
-        tubeRadius={0.013}
-        color={ICE_DARK}
-        opacity={0.8}
+        radius={1.66}
+        tubeRadius={0.016}
+        color={ICE_MAIN}
+        emissiveColor={ICE_DARK}
+        opacity={0.92}
         offsetAngle={Math.PI / 4}
         phase={2}
       />
       <MorphingRing
         rotationAxis={new THREE.Vector3(0.2, 1, 0.5)}
         speed={0.32}
-        radius={1.35}
-        tubeRadius={0.014}
-        color={ICE_LIGHT}
-        opacity={0.85}
+        radius={1.38}
+        tubeRadius={0.018}
+        color={ICE_POLAR}
+        emissiveColor={ICE_LIGHT}
+        opacity={0.95}
         offsetAngle={Math.PI / 6}
         phase={3}
       />
@@ -361,12 +349,12 @@ export default function SceneJourney({ totalProgress = 0 }: { totalProgress?: nu
         style={{ background: 'transparent' }}
         dpr={[1, 1.5]}
       >
-        {/* Dynamic Studio Lighting tuned for Frost Titanium */}
-        <ambientLight intensity={0.35} color="#ffffff" />
-        <pointLight position={[6, 6, 6]} intensity={3.2} color="#E0F2FE" />
-        <pointLight position={[-6, -4, -6]} intensity={1.5} color="#93C5FD" />
-        <pointLight position={[0, 0, 4]} intensity={2} color="#ffffff" />
-        <pointLight position={[3, -6, 2]} intensity={0.9} color="#3B82F6" />
+        {/* Enhanced High-Gloss Studio Lighting */}
+        <ambientLight intensity={0.55} color="#ffffff" />
+        <pointLight position={[6, 6, 6]} intensity={5.0} color="#FFFFFF" />
+        <pointLight position={[-6, -4, -6]} intensity={2.8} color="#93C5FD" />
+        <pointLight position={[0, 0, 4]} intensity={3.0} color="#E0F2FE" />
+        <pointLight position={[4, -6, 3]} intensity={1.5} color="#3B82F6" />
 
         <JourneyScene totalProgress={totalProgress} />
       </Canvas>

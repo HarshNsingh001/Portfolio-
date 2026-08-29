@@ -120,12 +120,12 @@ export default function Layout({ children }: LayoutProps) {
             alignItems: 'center',
             gap: '1.8rem',
             padding: '0.65rem 1.75rem',
-            background: scrolled ? 'rgba(10, 10, 12, 0.85)' : 'rgba(15, 15, 18, 0.65)',
+            background: scrolled ? 'rgba(6, 8, 12, 0.88)' : 'rgba(13, 17, 24, 0.65)',
             backdropFilter: 'blur(20px)',
             WebkitBackdropFilter: 'blur(20px)',
             borderRadius: '9999px',
-            border: scrolled ? '1px solid rgba(201, 168, 76, 0.25)' : '1px solid rgba(201, 168, 76, 0.15)',
-            boxShadow: scrolled ? '0 10px 30px rgba(0,0,0,0.6), 0 0 20px rgba(201,168,76,0.08)' : '0 10px 30px rgba(0,0,0,0.4)',
+            border: scrolled ? '1px solid var(--border-hover)' : '1px solid var(--border)',
+            boxShadow: scrolled ? '0 10px 30px rgba(0,0,0,0.6), 0 0 20px var(--gold-glow)' : '0 10px 30px rgba(0,0,0,0.4)',
             transition: 'all 0.4s ease',
           }}
         >
@@ -141,7 +141,7 @@ export default function Layout({ children }: LayoutProps) {
               fontSize: '0.62rem',
               letterSpacing: '0.15em',
               textTransform: 'uppercase',
-              color: 'var(--gold)',
+              color: 'var(--gold-light)',
             }}
             data-cursor-hover
             title="Back to Top"
@@ -151,15 +151,15 @@ export default function Layout({ children }: LayoutProps) {
                 width: '6px',
                 height: '6px',
                 borderRadius: '50%',
-                background: '#4ade80',
-                boxShadow: '0 0 8px #4ade80',
+                background: 'var(--gold)',
+                boxShadow: '0 0 8px var(--gold)',
                 display: 'inline-block',
               }}
             />
             <span>PORTFOLIO</span>
           </button>
 
-          <div style={{ width: '1px', height: '14px', background: 'rgba(201,168,76,0.2)' }} />
+          <div style={{ width: '1px', height: '14px', background: 'var(--border)' }} />
 
           {NAV_ITEMS.map(item => (
             <button
@@ -191,17 +191,17 @@ export default function Layout({ children }: LayoutProps) {
               alignItems: 'center',
               gap: '0.5rem',
               padding: '0.5rem 1rem',
-              background: 'rgba(15,15,18,0.85)',
+              background: 'rgba(13, 17, 24, 0.85)',
               backdropFilter: 'blur(20px)',
               borderRadius: '9999px',
-              border: '1px solid rgba(201,168,76,0.2)',
+              border: '1px solid var(--border)',
               fontFamily: 'var(--font-mono)',
               fontSize: '0.65rem',
-              color: 'var(--gold)',
+              color: 'var(--gold-light)',
               letterSpacing: '0.15em',
             }}
           >
-            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#4ade80' }} />
+            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--gold)' }} />
             PORTFOLIO
           </div>
 
@@ -214,9 +214,9 @@ export default function Layout({ children }: LayoutProps) {
               width: '42px',
               height: '42px',
               borderRadius: '50%',
-              background: 'rgba(15,15,18,0.85)',
+              background: 'rgba(13, 17, 24, 0.85)',
               backdropFilter: 'blur(20px)',
-              border: '1px solid rgba(201,168,76,0.2)',
+              border: '1px solid var(--border)',
               color: 'var(--gold)',
             }}
             data-cursor-hover
@@ -234,16 +234,16 @@ export default function Layout({ children }: LayoutProps) {
               top: '5rem',
               left: '1.5rem',
               right: '1.5rem',
-              background: 'rgba(10, 10, 12, 0.95)',
+              background: 'rgba(6, 8, 12, 0.95)',
               backdropFilter: 'blur(30px)',
               WebkitBackdropFilter: 'blur(30px)',
-              border: '1px solid rgba(201, 168, 76, 0.2)',
+              border: '1px solid var(--border-hover)',
               borderRadius: '16px',
               padding: '1.75rem',
               display: 'flex',
               flexDirection: 'column',
               gap: '1.25rem',
-              boxShadow: '0 20px 50px rgba(0,0,0,0.8)',
+              boxShadow: '0 20px 50px rgba(0,0,0,0.8), 0 0 30px var(--gold-glow)',
               pointerEvents: 'auto',
             }}
           >
