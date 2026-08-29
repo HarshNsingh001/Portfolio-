@@ -1,13 +1,14 @@
 import React, { useEffect, useRef, useState, Suspense } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ArrowUpRight, Download, Mail, Github, Linkedin, ChevronDown, Sparkles, Terminal, Cpu, Database, Cloud } from 'lucide-react';
+import { ArrowUpRight, Download, Mail, Github, Linkedin, ChevronDown, Sparkles } from 'lucide-react';
 import {
   FULL_NAME, TITLE, HERO_INTRO, LOCATION, GITHUB_URL, LINKEDIN_URL,
   ABOUT_TEXT, SKILL_CATEGORIES, EXPERIENCES, PROJECTS,
   RECRUITER_EMAIL, GENERAL_EMAIL, RESUME_URL
 } from '../constants';
-import ArmillarySphere from '../components/3d/ArmillarySphere';
+import SceneJourney from '../components/3d/SceneJourney';
+import ScrollHUD from '../components/ui/ScrollHUD';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -19,9 +20,12 @@ export default function Home() {
   const introRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
   const scrollHintRef = useRef<HTMLDivElement>(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
 
-  /* ── GSAP hero entrance + scroll animations ── */
+  // Total Page Scroll Progress (0.0 at top -> 1.0 at footer)
+  const [totalProgress, setTotalProgress] = useState(0);
+  const [activeSection, setActiveSection] = useState('home');
+
+  /* ── GSAP hero entrance + scroll tracking across entire page ── */
   useEffect(() => {
     const ctx = gsap.context(() => {
       // Hero entrance timeline
@@ -46,15 +50,31 @@ export default function Home() {
         tl.fromTo(scrollHintRef.current, { opacity: 0 }, { opacity: 1, duration: 0.8 }, '-=0.2');
       }
 
-      // Track scroll for 3D sphere deconstruction
+      // Track entire document scroll for 3D Kinetic Journey
       ScrollTrigger.create({
-        trigger: heroRef.current,
+        trigger: document.body,
         start: 'top top',
-        end: 'bottom top',
-        onUpdate: (self) => setScrollProgress(self.progress),
+        end: 'bottom bottom',
+        onUpdate: (self) => {
+          setTotalProgress(self.progress);
+        },
       });
 
-      // Section reveals
+      // Section triggers for active section detection
+      const sections = ['home', 'about', 'experience', 'skills', 'projects', 'resume', 'contact'];
+      sections.forEach((secId) => {
+        const el = document.getElementById(secId);
+        if (!el) return;
+        ScrollTrigger.create({
+          trigger: el,
+          start: 'top 50%',
+          end: 'bottom 50%',
+          onEnter: () => setActiveSection(secId),
+          onEnterBack: () => setActiveSection(secId),
+        });
+      });
+
+      // Section element reveal animations
       const revealSections = document.querySelectorAll('.section-reveal');
       revealSections.forEach((section) => {
         const elements = section.querySelectorAll('.gsap-reveal');
@@ -101,7 +121,7 @@ export default function Home() {
     return () => ctx.revert();
   }, []);
 
-  /* ── shared section heading helper ── */
+  /* ── Shared section heading helper ── */
   const sectionHeading = (label: string, title: string) => (
     <div className="gsap-reveal" style={{ marginBottom: '3.5rem' }}>
       <span className="section-label" style={{ marginBottom: '0.75rem' }}>{label}</span>
@@ -125,7 +145,19 @@ export default function Home() {
   return (
     <>
       {/* ════════════════════════════════════════
-          HERO SECTION
+          PERSISTENT 3D KINETIC JOURNEY CANVAS
+          ════════════════════════════════════════ */}
+      <Suspense fallback={null}>
+        <SceneJourney totalProgress={totalProgress} />
+      </Suspense>
+
+      {/* ════════════════════════════════════════
+          DESKTOP INTERACTIVE SCROLL HUD RAIL
+          ════════════════════════════════════════ */}
+      <ScrollHUD activeSection={activeSection} totalProgress={totalProgress} />
+
+      {/* ════════════════════════════════════════
+          01. HERO SECTION
           ════════════════════════════════════════ */}
       <section
         ref={heroRef}
@@ -136,39 +168,19 @@ export default function Home() {
           display: 'flex',
           alignItems: 'center',
           overflow: 'hidden',
-          background: 'var(--bg)',
+          background: 'transparent',
           paddingTop: '6rem',
           paddingBottom: '4rem',
         }}
       >
-        {/* Ambient Gold Radial Glow */}
+        {/* Ambient Gold/Ice Radial Glow */}
         <div style={{
           position: 'absolute',
           inset: 0,
           zIndex: 0,
-          background: 'radial-gradient(ellipse 65% 65% at 75% 45%, rgba(201,168,76,0.1) 0%, rgba(5,5,5,0) 70%)',
+          background: 'radial-gradient(ellipse 65% 65% at 75% 45%, rgba(147,197,253,0.08) 0%, rgba(6,8,12,0) 70%)',
           pointerEvents: 'none',
         }} />
-
-        {/* 3D Armillary Sphere Canvas — Desktop Right Side / Background */}
-        <div
-          className="hero-canvas-container"
-          style={{
-            position: 'absolute',
-            top: 0,
-            right: 0,
-            width: '58%',
-            height: '100%',
-            zIndex: 1,
-            pointerEvents: 'none',
-            opacity: Math.max(0, 1 - scrollProgress * 1.2),
-            transition: 'opacity 0.2s linear',
-          }}
-        >
-          <Suspense fallback={null}>
-            <ArmillarySphere scrollProgress={scrollProgress} />
-          </Suspense>
-        </div>
 
         {/* Hero Content Container */}
         <div className="container" style={{ position: 'relative', zIndex: 2, width: '100%' }}>
@@ -183,8 +195,8 @@ export default function Home() {
                 gap: '0.6rem',
                 padding: '0.4rem 1rem',
                 borderRadius: '9999px',
-                background: 'rgba(201, 168, 76, 0.08)',
-                border: '1px solid rgba(201, 168, 76, 0.25)',
+                background: 'rgba(147, 197, 253, 0.08)',
+                border: '1px solid rgba(147, 197, 253, 0.25)',
                 marginBottom: '1.75rem',
               }}
             >
@@ -227,7 +239,7 @@ export default function Home() {
               <span
                 style={{
                   color: 'var(--gold)',
-                  textShadow: '0 0 35px rgba(201, 168, 76, 0.35)',
+                  textShadow: '0 0 35px rgba(147, 197, 253, 0.35)',
                   display: 'block',
                 }}
               >
@@ -348,10 +360,6 @@ export default function Home() {
             50% { opacity: 1; transform: scaleY(1.1); }
           }
           @media (max-width: 900px) {
-            .hero-canvas-container {
-              width: 100% !important;
-              opacity: 0.3 !important;
-            }
             .hero-text-wrapper {
               max-width: 100% !important;
             }
@@ -360,17 +368,19 @@ export default function Home() {
       </section>
 
       {/* ════════════════════════════════════════
-          ABOUT SECTION
+          02. ABOUT SECTION
           ════════════════════════════════════════ */}
       <section
         id="about"
         className="section-reveal"
         style={{
           padding: '8rem 0',
-          background: 'var(--bg-2)',
+          background: 'rgba(13, 17, 24, 0.65)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
           position: 'relative',
           overflow: 'hidden',
-          borderTop: '1px solid rgba(201, 168, 76, 0.08)',
+          borderTop: '1px solid rgba(147, 197, 253, 0.08)',
         }}
       >
         <div className="section-bg-number">01</div>
@@ -444,17 +454,19 @@ export default function Home() {
       </section>
 
       {/* ════════════════════════════════════════
-          EXPERIENCE SECTION
+          03. EXPERIENCE SECTION
           ════════════════════════════════════════ */}
       <section
         id="experience"
         className="section-reveal"
         style={{
           padding: '8rem 0',
-          background: 'var(--bg)',
+          background: 'rgba(6, 8, 12, 0.6)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
           position: 'relative',
           overflow: 'hidden',
-          borderTop: '1px solid rgba(201, 168, 76, 0.08)',
+          borderTop: '1px solid rgba(147, 197, 253, 0.08)',
         }}
       >
         <div className="section-bg-number">02</div>
@@ -463,7 +475,7 @@ export default function Home() {
           {sectionHeading('// 02. EXPERIENCE', 'Professional Track Record')}
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-            {EXPERIENCES.map((exp, idx) => (
+            {EXPERIENCES.map((exp) => (
               <div
                 key={exp.id}
                 className="glass-card gsap-reveal"
@@ -560,17 +572,19 @@ export default function Home() {
       </section>
 
       {/* ════════════════════════════════════════
-          SKILLS SECTION
+          04. SKILLS SECTION
           ════════════════════════════════════════ */}
       <section
         id="skills"
         className="section-reveal"
         style={{
           padding: '8rem 0',
-          background: 'var(--bg-2)',
+          background: 'rgba(13, 17, 24, 0.65)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
           position: 'relative',
           overflow: 'hidden',
-          borderTop: '1px solid rgba(201, 168, 76, 0.08)',
+          borderTop: '1px solid rgba(147, 197, 253, 0.08)',
         }}
       >
         <div className="section-bg-number">03</div>
@@ -622,17 +636,19 @@ export default function Home() {
       </section>
 
       {/* ════════════════════════════════════════
-          PROJECTS SECTION
+          05. PROJECTS SECTION
           ════════════════════════════════════════ */}
       <section
         id="projects"
         className="section-reveal"
         style={{
           padding: '8rem 0',
-          background: 'var(--bg)',
+          background: 'rgba(6, 8, 12, 0.6)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
           position: 'relative',
           overflow: 'hidden',
-          borderTop: '1px solid rgba(201, 168, 76, 0.08)',
+          borderTop: '1px solid rgba(147, 197, 253, 0.08)',
         }}
       >
         <div className="section-bg-number">04</div>
@@ -661,7 +677,7 @@ export default function Home() {
                   fontFamily: 'var(--font-display)',
                   fontSize: '4.5rem',
                   fontWeight: 800,
-                  color: 'rgba(201, 168, 76, 0.06)',
+                  color: 'rgba(147, 197, 253, 0.06)',
                   lineHeight: 1,
                   userSelect: 'none',
                   pointerEvents: 'none',
@@ -707,9 +723,9 @@ export default function Home() {
                           fontSize: '0.75rem',
                           fontFamily: 'var(--font-mono)',
                           padding: '0.4rem 0.8rem',
-                          border: '1px solid rgba(201, 168, 76, 0.3)',
+                          border: '1px solid rgba(147, 197, 253, 0.3)',
                           borderRadius: '4px',
-                          background: 'rgba(201, 168, 76, 0.05)',
+                          background: 'rgba(147, 197, 253, 0.05)',
                         }}
                       >
                         <Github size={15} />
@@ -750,17 +766,19 @@ export default function Home() {
       </section>
 
       {/* ════════════════════════════════════════
-          RESUME SECTION
+          06. RESUME SECTION
           ════════════════════════════════════════ */}
       <section
         id="resume"
         className="section-reveal"
         style={{
           padding: '8rem 0',
-          background: 'var(--bg-2)',
+          background: 'rgba(13, 17, 24, 0.65)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
           position: 'relative',
           overflow: 'hidden',
-          borderTop: '1px solid rgba(201, 168, 76, 0.08)',
+          borderTop: '1px solid rgba(147, 197, 253, 0.08)',
         }}
       >
         <div className="section-bg-number">05</div>
@@ -802,12 +820,12 @@ export default function Home() {
               padding: '3.5rem',
               borderRadius: '8px',
               textAlign: 'left',
-              border: '1px solid rgba(201, 168, 76, 0.2)',
+              border: '1px solid rgba(147, 197, 253, 0.2)',
               boxShadow: '0 25px 60px rgba(0,0,0,0.6)',
             }}
           >
             {/* Header */}
-            <div style={{ textAlign: 'center', borderBottom: '1px solid rgba(201, 168, 76, 0.15)', paddingBottom: '2rem', marginBottom: '2.5rem' }}>
+            <div style={{ textAlign: 'center', borderBottom: '1px solid rgba(147, 197, 253, 0.15)', paddingBottom: '2rem', marginBottom: '2.5rem' }}>
               <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', fontWeight: 800, color: '#ffffff', marginBottom: '0.75rem', letterSpacing: '-0.01em' }}>
                 HARSH NARAYAN SINGH
               </h2>
@@ -824,7 +842,7 @@ export default function Home() {
 
             {/* Professional Summary */}
             <div style={{ marginBottom: '2.25rem' }}>
-              <h3 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--gold)', letterSpacing: '0.25em', textTransform: 'uppercase', marginBottom: '0.85rem', borderBottom: '1px solid rgba(201, 168, 76, 0.1)', paddingBottom: '0.4rem', fontWeight: 600 }}>
+              <h3 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--gold)', letterSpacing: '0.25em', textTransform: 'uppercase', marginBottom: '0.85rem', borderBottom: '1px solid rgba(147, 197, 253, 0.1)', paddingBottom: '0.4rem', fontWeight: 600 }}>
                 Professional Summary
               </h3>
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.85, fontWeight: 300 }}>
@@ -834,7 +852,7 @@ export default function Home() {
 
             {/* Education */}
             <div style={{ marginBottom: '2.25rem' }}>
-              <h3 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--gold)', letterSpacing: '0.25em', textTransform: 'uppercase', marginBottom: '0.85rem', borderBottom: '1px solid rgba(201, 168, 76, 0.1)', paddingBottom: '0.4rem', fontWeight: 600 }}>
+              <h3 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--gold)', letterSpacing: '0.25em', textTransform: 'uppercase', marginBottom: '0.85rem', borderBottom: '1px solid rgba(147, 197, 253, 0.1)', paddingBottom: '0.4rem', fontWeight: 600 }}>
                 Education
               </h3>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '0.35rem' }}>
@@ -848,7 +866,7 @@ export default function Home() {
 
             {/* Technical Skills breakdown */}
             <div style={{ marginBottom: '2.25rem' }}>
-              <h3 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--gold)', letterSpacing: '0.25em', textTransform: 'uppercase', marginBottom: '0.85rem', borderBottom: '1px solid rgba(201, 168, 76, 0.1)', paddingBottom: '0.4rem', fontWeight: 600 }}>
+              <h3 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--gold)', letterSpacing: '0.25em', textTransform: 'uppercase', marginBottom: '0.85rem', borderBottom: '1px solid rgba(147, 197, 253, 0.1)', paddingBottom: '0.4rem', fontWeight: 600 }}>
                 Technical Competencies
               </h3>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '0.75rem' }}>
@@ -872,7 +890,7 @@ export default function Home() {
 
             {/* DSA & Certs */}
             <div>
-              <h3 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--gold)', letterSpacing: '0.25em', textTransform: 'uppercase', marginBottom: '0.85rem', borderBottom: '1px solid rgba(201, 168, 76, 0.1)', paddingBottom: '0.4rem', fontWeight: 600 }}>
+              <h3 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--gold)', letterSpacing: '0.25em', textTransform: 'uppercase', marginBottom: '0.85rem', borderBottom: '1px solid rgba(147, 197, 253, 0.1)', paddingBottom: '0.4rem', fontWeight: 600 }}>
                 Competitive Programming & Certifications
               </h3>
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', lineHeight: 1.8, marginBottom: '0.4rem' }}>
@@ -895,17 +913,19 @@ export default function Home() {
       </section>
 
       {/* ════════════════════════════════════════
-          CONTACT SECTION
+          07. CONTACT SECTION
           ════════════════════════════════════════ */}
       <section
         id="contact"
         className="section-reveal"
         style={{
           padding: '9rem 0 7rem',
-          background: 'var(--bg)',
+          background: 'rgba(6, 8, 12, 0.75)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
           position: 'relative',
           overflow: 'hidden',
-          borderTop: '1px solid rgba(201, 168, 76, 0.12)',
+          borderTop: '1px solid rgba(147, 197, 253, 0.12)',
         }}
       >
         <div className="section-bg-number">06</div>
@@ -914,7 +934,7 @@ export default function Home() {
         <div style={{
           position: 'absolute',
           inset: 0,
-          background: 'radial-gradient(ellipse 55% 55% at 50% 55%, rgba(201,168,76,0.08) 0%, transparent 70%)',
+          background: 'radial-gradient(ellipse 55% 55% at 50% 55%, rgba(147,197,253,0.08) 0%, transparent 70%)',
           pointerEvents: 'none',
         }} />
 
