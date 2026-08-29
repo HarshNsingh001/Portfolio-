@@ -170,7 +170,19 @@ function AmbientDust() {
 /* ─────────────────────────────────────────
    SCENE WRAPPER
    ───────────────────────────────────────── */
-function ArmillaryScene({ scrollProgress }: { scrollProgress: number }) {
+interface ArmillarySceneProps {
+  scrollProgress: number;
+  gold?: string;
+  goldLight?: string;
+  goldDark?: string;
+}
+
+function ArmillaryScene({
+  scrollProgress,
+  gold = '#C9A84C',
+  goldLight = '#E8C87A',
+  goldDark = '#8B6914',
+}: ArmillarySceneProps) {
   const groupRef = useRef<THREE.Group>(null);
 
   useFrame(({ clock, mouse }) => {
@@ -180,10 +192,6 @@ function ArmillaryScene({ scrollProgress }: { scrollProgress: number }) {
     groupRef.current.rotation.x += (-mouse.y * 0.08 - groupRef.current.rotation.x) * 0.04;
   });
 
-  const GOLD = '#C9A84C';
-  const GOLD_LIGHT = '#E8C87A';
-  const GOLD_DARK = '#8B6914';
-
   return (
     <group ref={groupRef}>
       {/* Outer ring — equatorial, slow */}
@@ -192,7 +200,7 @@ function ArmillaryScene({ scrollProgress }: { scrollProgress: number }) {
         speed={0.12}
         radius={2.1}
         tubeRadius={0.009}
-        color={GOLD_LIGHT}
+        color={goldLight}
         opacity={1.0}
         scrollProgress={scrollProgress}
       />
@@ -203,7 +211,7 @@ function ArmillaryScene({ scrollProgress }: { scrollProgress: number }) {
         speed={0.18}
         radius={1.9}
         tubeRadius={0.011}
-        color={GOLD}
+        color={gold}
         opacity={1.0}
         scrollProgress={scrollProgress}
         offsetAngle={Math.PI / 3}
@@ -215,7 +223,7 @@ function ArmillaryScene({ scrollProgress }: { scrollProgress: number }) {
         speed={0.26}
         radius={1.65}
         tubeRadius={0.013}
-        color={GOLD_DARK}
+        color={goldDark}
         opacity={0.9}
         scrollProgress={scrollProgress}
         offsetAngle={Math.PI / 4}
@@ -227,7 +235,7 @@ function ArmillaryScene({ scrollProgress }: { scrollProgress: number }) {
         speed={0.35}
         radius={1.35}
         tubeRadius={0.015}
-        color={GOLD_LIGHT}
+        color={goldLight}
         opacity={0.85}
         scrollProgress={scrollProgress}
         offsetAngle={Math.PI / 6}
@@ -250,9 +258,21 @@ function ArmillaryScene({ scrollProgress }: { scrollProgress: number }) {
    ───────────────────────────────────────── */
 interface ArmillarySphereProps {
   scrollProgress?: number;
+  gold?: string;
+  goldLight?: string;
+  goldDark?: string;
+  lightColor1?: string;
+  lightColor2?: string;
 }
 
-export default function ArmillarySphere({ scrollProgress = 0 }: ArmillarySphereProps) {
+export default function ArmillarySphere({
+  scrollProgress = 0,
+  gold = '#C9A84C',
+  goldLight = '#E8C87A',
+  goldDark = '#8B6914',
+  lightColor1 = '#FFE090',
+  lightColor2 = '#C9A84C',
+}: ArmillarySphereProps) {
   return (
     <Canvas
       camera={{ position: [0, 0, 5.5], fov: 45 }}
@@ -264,14 +284,19 @@ export default function ArmillarySphere({ scrollProgress = 0 }: ArmillarySphereP
       style={{ background: 'transparent' }}
       dpr={[1, 1.5]}
     >
-      {/* Lighting */}
+      {/* Dynamic Lighting tuned to the theme */}
       <ambientLight intensity={0.3} color="#ffffff" />
-      <pointLight position={[5, 5, 5]} intensity={3} color="#FFE090" />
-      <pointLight position={[-5, -3, -5]} intensity={1.2} color="#C9A84C" />
-      <pointLight position={[0, 0, 3]} intensity={2} color="#fff8e7" />
-      <pointLight position={[3, -5, 2]} intensity={0.8} color="#8B6914" />
+      <pointLight position={[5, 5, 5]} intensity={3} color={lightColor1} />
+      <pointLight position={[-5, -3, -5]} intensity={1.2} color={lightColor2} />
+      <pointLight position={[0, 0, 3]} intensity={2} color="#ffffff" />
+      <pointLight position={[3, -5, 2]} intensity={0.8} color={goldDark} />
 
-      <ArmillaryScene scrollProgress={scrollProgress} />
+      <ArmillaryScene
+        scrollProgress={scrollProgress}
+        gold={gold}
+        goldLight={goldLight}
+        goldDark={goldDark}
+      />
     </Canvas>
   );
 }

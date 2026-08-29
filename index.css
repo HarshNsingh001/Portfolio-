@@ -3,7 +3,7 @@
 /* ==========================================
    DESIGN TOKENS
    ========================================== */
-:root {
+:root, [data-theme="gold"] {
   --bg: #050505;
   --bg-2: #0a0a0a;
   --bg-3: #111111;
@@ -24,6 +24,86 @@
   --font-display: 'Syne', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-theme="cyan"] {
+  --bg: #04060B;
+  --bg-2: #080D18;
+  --bg-3: #0E1626;
+  --gold: #38BDF8;
+  --gold-light: #818CF8;
+  --gold-dark: #1E40AF;
+  --gold-glow: rgba(56, 189, 248, 0.18);
+  --gold-glow-strong: rgba(56, 189, 248, 0.4);
+  --text-primary: #F0F6FC;
+  --text-secondary: #8BA2C4;
+  --text-muted: #3B5275;
+  --border: rgba(56, 189, 248, 0.15);
+  --border-hover: rgba(56, 189, 248, 0.45);
+}
+
+[data-theme="emerald"] {
+  --bg: #030704;
+  --bg-2: #07120A;
+  --bg-3: #0D1F12;
+  --gold: #10B981;
+  --gold-light: #34D399;
+  --gold-dark: #047857;
+  --gold-glow: rgba(16, 185, 129, 0.18);
+  --gold-glow-strong: rgba(16, 185, 129, 0.4);
+  --text-primary: #ECFDF5;
+  --text-secondary: #86A795;
+  --text-muted: #345842;
+  --border: rgba(16, 185, 129, 0.15);
+  --border-hover: rgba(16, 185, 129, 0.45);
+}
+
+[data-theme="purple"] {
+  --bg: #06040A;
+  --bg-2: #0E0917;
+  --bg-3: #160E24;
+  --gold: #A855F7;
+  --gold-light: #EC4899;
+  --gold-dark: #6B21A8;
+  --gold-glow: rgba(168, 85, 247, 0.18);
+  --gold-glow-strong: rgba(168, 85, 247, 0.4);
+  --text-primary: #FAF5FF;
+  --text-secondary: #B098C9;
+  --text-muted: #594270;
+  --border: rgba(168, 85, 247, 0.15);
+  --border-hover: rgba(168, 85, 247, 0.45);
+}
+
+[data-theme="orange"] {
+  --bg: #070605;
+  --bg-2: #120E0B;
+  --bg-3: #1C1511;
+  --gold: #FF6B00;
+  --gold-light: #FFA133;
+  --gold-dark: #B43B00;
+  --gold-glow: rgba(255, 107, 0, 0.18);
+  --gold-glow-strong: rgba(255, 107, 0, 0.4);
+  --text-primary: #FFF7ED;
+  --text-secondary: #B89A82;
+  --text-muted: #5E4633;
+  --border: rgba(255, 107, 0, 0.15);
+  --border-hover: rgba(255, 107, 0, 0.45);
+}
+
+[data-theme="ice"] {
+  --bg: #06080C;
+  --bg-2: #0D1118;
+  --bg-3: #141924;
+  --gold: #93C5FD;
+  --gold-light: #E0F2FE;
+  --gold-dark: #3B82F6;
+  --gold-glow: rgba(147, 197, 253, 0.18);
+  --gold-glow-strong: rgba(147, 197, 253, 0.4);
+  --text-primary: #F8FAFC;
+  --text-secondary: #94A3B8;
+  --text-muted: #475569;
+  --border: rgba(147, 197, 253, 0.15);
+  --border-hover: rgba(147, 197, 253, 0.45);
 }
 
 /* ==========================================
