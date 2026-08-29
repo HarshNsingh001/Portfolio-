@@ -15,6 +15,17 @@ export interface ThemeConfig {
 
 export const THEMES: ThemeConfig[] = [
   {
+    id: 'ice',
+    name: 'Frost Titanium',
+    category: 'Nordic Minimal & Ice Blue',
+    dotColor: '#93C5FD',
+    gold: '#93C5FD',
+    goldLight: '#E0F2FE',
+    goldDark: '#3B82F6',
+    lightColor1: '#93C5FD',
+    lightColor2: '#E0F2FE',
+  },
+  {
     id: 'slate',
     name: 'Apple Space Slate',
     category: 'Silicon Valley Pro',

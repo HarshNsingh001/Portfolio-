@@ -22,7 +22,7 @@ export default function Home() {
   const scrollHintRef = useRef<HTMLDivElement>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [currentTheme, setCurrentTheme] = useState(() => {
-    return localStorage.getItem('hns-theme') || 'gold';
+    return localStorage.getItem('hns-theme') || 'ice';
   });
 
   const handleSelectTheme = (themeId: string) => {

@@ -111,6 +111,23 @@
   --border-hover: rgba(16, 185, 129, 0.45);
 }
 
+/* 6. Frost Titanium & Nordic Ice Blue */
+[data-theme="ice"] {
+  --bg: #06080C;
+  --bg-2: #0D1118;
+  --bg-3: #141924;
+  --gold: #93C5FD;
+  --gold-light: #E0F2FE;
+  --gold-dark: #3B82F6;
+  --gold-glow: rgba(147, 197, 253, 0.2);
+  --gold-glow-strong: rgba(147, 197, 253, 0.45);
+  --text-primary: #F8FAFC;
+  --text-secondary: #94A3B8;
+  --text-muted: #475569;
+  --border: rgba(147, 197, 253, 0.16);
+  --border-hover: rgba(147, 197, 253, 0.48);
+}
+
 /* ==========================================
    RESET & BASE
    ========================================== */
