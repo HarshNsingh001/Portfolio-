@@ -8,7 +8,6 @@ import {
   RECRUITER_EMAIL, GENERAL_EMAIL, RESUME_URL
 } from '../constants';
 import ArmillarySphere from '../components/3d/ArmillarySphere';
-import ThemeSwitcher, { THEMES } from '../components/ui/ThemeSwitcher';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -21,21 +20,6 @@ export default function Home() {
   const ctaRef = useRef<HTMLDivElement>(null);
   const scrollHintRef = useRef<HTMLDivElement>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [currentTheme, setCurrentTheme] = useState(() => {
-    return localStorage.getItem('hns-theme') || 'ice';
-  });
-
-  const handleSelectTheme = (themeId: string) => {
-    setCurrentTheme(themeId);
-    localStorage.setItem('hns-theme', themeId);
-    document.documentElement.setAttribute('data-theme', themeId);
-  };
-
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', currentTheme);
-  }, [currentTheme]);
-
-  const activeThemeConfig = THEMES.find(t => t.id === currentTheme) || THEMES[0];
 
   /* ── GSAP hero entrance + scroll animations ── */
   useEffect(() => {
@@ -182,14 +166,7 @@ export default function Home() {
           }}
         >
           <Suspense fallback={null}>
-            <ArmillarySphere
-              scrollProgress={scrollProgress}
-              gold={activeThemeConfig.gold}
-              goldLight={activeThemeConfig.goldLight}
-              goldDark={activeThemeConfig.goldDark}
-              lightColor1={activeThemeConfig.lightColor1}
-              lightColor2={activeThemeConfig.lightColor2}
-            />
+            <ArmillarySphere scrollProgress={scrollProgress} />
           </Suspense>
         </div>
 
@@ -1012,9 +989,6 @@ export default function Home() {
           </p>
         </div>
       </section>
-
-      {/* Interactive Theme Switcher */}
-      <ThemeSwitcher currentTheme={currentTheme} onSelectTheme={handleSelectTheme} />
     </>
   );
 }

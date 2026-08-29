@@ -1,118 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap');
 
 /* ==========================================
-   DESIGN TOKENS
+   DESIGN TOKENS — FROST TITANIUM PERMANENT
    ========================================== */
-:root, [data-theme="gold"] {
-  --bg: #050505;
-  --bg-2: #0a0a0a;
-  --bg-3: #111111;
-  --gold: #C9A84C;
-  --gold-light: #E8C87A;
-  --gold-dark: #8B6914;
-  --gold-glow: rgba(201, 168, 76, 0.15);
-  --gold-glow-strong: rgba(201, 168, 76, 0.35);
-  --white: #FFFFFF;
-  --text-primary: #F5F0E8;
-  --text-secondary: #A09070;
-  --text-muted: #504030;
-  --border: rgba(201, 168, 76, 0.12);
-  --border-hover: rgba(201, 168, 76, 0.4);
-  --glass: rgba(255, 255, 255, 0.02);
-  --glass-border: rgba(255, 255, 255, 0.05);
-  --font-sans: 'Space Grotesk', sans-serif;
-  --font-display: 'Syne', sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* 1. Apple Space Slate & Steel Blue */
-[data-theme="slate"] {
-  --bg: #07090E;
-  --bg-2: #0D111A;
-  --bg-3: #141A26;
-  --gold: #60A5FA;
-  --gold-light: #93C5FD;
-  --gold-dark: #1D4ED8;
-  --gold-glow: rgba(96, 165, 250, 0.18);
-  --gold-glow-strong: rgba(96, 165, 250, 0.4);
-  --text-primary: #F8FAFC;
-  --text-secondary: #94A3B8;
-  --text-muted: #475569;
-  --border: rgba(96, 165, 250, 0.14);
-  --border-hover: rgba(96, 165, 250, 0.45);
-}
-
-/* 2. Stripe & GitHub Indigo */
-[data-theme="cobalt"] {
-  --bg: #060713;
-  --bg-2: #0B0E20;
-  --bg-3: #121630;
-  --gold: #6366F1;
-  --gold-light: #A5B4FC;
-  --gold-dark: #3730A3;
-  --gold-glow: rgba(99, 102, 241, 0.2);
-  --gold-glow-strong: rgba(99, 102, 241, 0.45);
-  --text-primary: #EEF2FF;
-  --text-secondary: #9CA3AF;
-  --text-muted: #4B5563;
-  --border: rgba(99, 102, 241, 0.16);
-  --border-hover: rgba(99, 102, 241, 0.5);
-}
-
-/* 3. OpenAI & Claude Platinum */
-[data-theme="platinum"] {
-  --bg: #080808;
-  --bg-2: #101010;
-  --bg-3: #181818;
-  --gold: #D4C8B5;
-  --gold-light: #F5EFE6;
-  --gold-dark: #8C7F6B;
-  --gold-glow: rgba(212, 200, 181, 0.16);
-  --gold-glow-strong: rgba(212, 200, 181, 0.35);
-  --text-primary: #FAF8F5;
-  --text-secondary: #A39B8E;
-  --text-muted: #575249;
-  --border: rgba(212, 200, 181, 0.14);
-  --border-hover: rgba(212, 200, 181, 0.4);
-}
-
-/* 4. Vercel Monochrome & Chrome */
-[data-theme="chrome"] {
-  --bg: #000000;
-  --bg-2: #0A0A0A;
-  --bg-3: #141414;
-  --gold: #E2E8F0;
-  --gold-light: #FFFFFF;
-  --gold-dark: #64748B;
-  --gold-glow: rgba(226, 232, 240, 0.15);
-  --gold-glow-strong: rgba(255, 255, 255, 0.3);
-  --text-primary: #FFFFFF;
-  --text-secondary: #94A3B8;
-  --text-muted: #475569;
-  --border: rgba(255, 255, 255, 0.12);
-  --border-hover: rgba(255, 255, 255, 0.45);
-}
-
-/* 5. Deep Forest Sage & Mint */
-[data-theme="sage"] {
-  --bg: #040705;
-  --bg-2: #08110B;
-  --bg-3: #0E1C13;
-  --gold: #10B981;
-  --gold-light: #6EE7B7;
-  --gold-dark: #065F46;
-  --gold-glow: rgba(16, 185, 129, 0.18);
-  --gold-glow-strong: rgba(16, 185, 129, 0.4);
-  --text-primary: #ECFDF5;
-  --text-secondary: #86A795;
-  --text-muted: #345842;
-  --border: rgba(16, 185, 129, 0.15);
-  --border-hover: rgba(16, 185, 129, 0.45);
-}
-
-/* 6. Frost Titanium & Nordic Ice Blue */
-[data-theme="ice"] {
+:root {
   --bg: #06080C;
   --bg-2: #0D1118;
   --bg-3: #141924;
@@ -121,11 +12,18 @@
   --gold-dark: #3B82F6;
   --gold-glow: rgba(147, 197, 253, 0.2);
   --gold-glow-strong: rgba(147, 197, 253, 0.45);
+  --white: #FFFFFF;
   --text-primary: #F8FAFC;
   --text-secondary: #94A3B8;
   --text-muted: #475569;
   --border: rgba(147, 197, 253, 0.16);
   --border-hover: rgba(147, 197, 253, 0.48);
+  --glass: rgba(255, 255, 255, 0.02);
+  --glass-border: rgba(255, 255, 255, 0.05);
+  --font-sans: 'Space Grotesk', sans-serif;
+  --font-display: 'Syne', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ==========================================
@@ -169,7 +67,7 @@ button { cursor: none; border: none; background: none; font-family: inherit; }
   position: fixed;
   top: 0; left: 0;
   width: 36px; height: 36px;
-  border: 1px solid rgba(201, 168, 76, 0.6);
+  border: 1px solid rgba(147, 197, 253, 0.6);
   border-radius: 50%;
   pointer-events: none;
   z-index: 9999;
@@ -197,7 +95,7 @@ button { cursor: none; border: none; background: none; font-family: inherit; }
 .cursor-outer.hovered {
   width: 56px; height: 56px;
   border-color: var(--gold);
-  background: rgba(201, 168, 76, 0.06);
+  background: rgba(147, 197, 253, 0.08);
 }
 
 @media (max-width: 768px) {
@@ -246,7 +144,7 @@ button { cursor: none; border: none; background: none; font-family: inherit; }
 
 .text-glow {
   color: var(--gold);
-  text-shadow: 0 0 20px rgba(201, 168, 76, 0.4), 0 0 60px rgba(201, 168, 76, 0.15);
+  text-shadow: 0 0 20px rgba(147, 197, 253, 0.4), 0 0 60px rgba(147, 197, 253, 0.15);
 }
 
 /* ==========================================
@@ -262,7 +160,7 @@ button { cursor: none; border: none; background: none; font-family: inherit; }
    GLASS CARD
    ========================================== */
 .glass-card {
-  background: linear-gradient(135deg, rgba(201, 168, 76, 0.04) 0%, rgba(255,255,255,0.01) 100%);
+  background: linear-gradient(135deg, rgba(147, 197, 253, 0.04) 0%, rgba(255,255,255,0.01) 100%);
   border: 1px solid var(--border);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -270,9 +168,23 @@ button { cursor: none; border: none; background: none; font-family: inherit; }
 }
 
 .glass-card:hover {
-  border-color: rgba(201, 168, 76, 0.35);
-  box-shadow: 0 0 40px rgba(201, 168, 76, 0.08), 0 25px 80px rgba(0,0,0,0.6);
-  background: linear-gradient(135deg, rgba(201, 168, 76, 0.07) 0%, rgba(255,255,255,0.01) 100%);
+  border-color: rgba(147, 197, 253, 0.4);
+  box-shadow: 0 0 40px rgba(147, 197, 253, 0.1), 0 25px 80px rgba(0,0,0,0.6);
+  background: linear-gradient(135deg, rgba(147, 197, 253, 0.07) 0%, rgba(255,255,255,0.01) 100%);
+}
+
+.glass-card-gold {
+  background: linear-gradient(135deg, rgba(147, 197, 253, 0.05) 0%, rgba(255,255,255,0.01) 100%);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: border-color 0.4s ease, box-shadow 0.4s ease, background 0.4s ease;
+}
+
+.glass-card-gold:hover {
+  border-color: var(--border-hover);
+  box-shadow: 0 0 30px var(--gold-glow), 0 20px 60px rgba(0,0,0,0.5);
+  background: linear-gradient(135deg, rgba(147, 197, 253, 0.08) 0%, rgba(255,255,255,0.01) 100%);
 }
 
 /* ==========================================
@@ -284,7 +196,7 @@ button { cursor: none; border: none; background: none; font-family: inherit; }
   letter-spacing: 0.35em;
   text-transform: uppercase;
   color: var(--gold);
-  opacity: 0.75;
+  opacity: 0.85;
   display: block;
 }
 
@@ -328,7 +240,7 @@ button { cursor: none; border: none; background: none; font-family: inherit; }
 }
 
 .btn-gold:hover::before { transform: translateX(0); }
-.btn-gold:hover { color: #050505; }
+.btn-gold:hover { color: #06080C; }
 .btn-gold > * { position: relative; z-index: 1; }
 
 /* ==========================================
@@ -336,22 +248,12 @@ button { cursor: none; border: none; background: none; font-family: inherit; }
    ========================================== */
 .gsap-reveal {
   opacity: 0;
-  transform: translateY(50px);
-}
-
-.gsap-reveal-left {
-  opacity: 0;
-  transform: translateX(-50px);
-}
-
-.gsap-reveal-right {
-  opacity: 0;
-  transform: translateX(50px);
+  transform: translateY(40px);
 }
 
 .gsap-reveal-scale {
   opacity: 0;
-  transform: scale(0.9);
+  transform: scale(0.92);
 }
 
 /* ==========================================
@@ -359,12 +261,12 @@ button { cursor: none; border: none; background: none; font-family: inherit; }
    ========================================== */
 .skill-tag {
   font-family: var(--font-mono);
-  font-size: 0.6rem;
+  font-size: 0.62rem;
   letter-spacing: 0.1em;
-  padding: 0.3rem 0.8rem;
+  padding: 0.35rem 0.85rem;
   border: 1px solid var(--border);
   color: var(--text-secondary);
-  background: rgba(201, 168, 76, 0.02);
+  background: rgba(147, 197, 253, 0.03);
   transition: all 0.3s ease;
   cursor: default;
   display: inline-block;
@@ -372,9 +274,9 @@ button { cursor: none; border: none; background: none; font-family: inherit; }
 
 .skill-tag:hover {
   border-color: var(--gold);
-  color: var(--gold);
-  background: rgba(201, 168, 76, 0.07);
-  box-shadow: 0 0 12px rgba(201, 168, 76, 0.1);
+  color: var(--gold-light);
+  background: rgba(147, 197, 253, 0.09);
+  box-shadow: 0 0 12px rgba(147, 197, 253, 0.18);
 }
 
 /* ==========================================
@@ -403,62 +305,11 @@ button { cursor: none; border: none; background: none; font-family: inherit; }
 }
 
 .nav-link:hover, .nav-link.active {
-  color: var(--gold);
+  color: var(--gold-light);
 }
 
 .nav-link:hover::after, .nav-link.active::after {
   transform: scaleX(1);
-}
-
-/* ==========================================
-   HORIZONTAL RULE
-   ========================================== */
-.section-hr {
-  border: none;
-  height: 1px;
-  background: linear-gradient(to right, transparent, rgba(201,168,76,0.15), transparent);
-}
-
-/* ==========================================
-   LOADING SCREEN
-   ========================================== */
-#loader {
-  position: fixed;
-  inset: 0;
-  background: var(--bg);
-  z-index: 10000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.loader-name {
-  font-family: var(--font-display);
-  font-size: clamp(2.5rem, 7vw, 5rem);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold) 45%, var(--gold-light) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.loader-progress {
-  width: 180px;
-  height: 1px;
-  background: rgba(201,168,76,0.1);
-  position: relative;
-  overflow: hidden;
-}
-
-.loader-progress-fill {
-  position: absolute;
-  top: 0; left: 0; height: 100%;
-  background: linear-gradient(to right, var(--gold-dark), var(--gold-light));
-  width: 0%;
-  transition: width 0.05s linear;
 }
 
 /* ==========================================
@@ -469,7 +320,7 @@ button { cursor: none; border: none; background: none; font-family: inherit; }
   font-size: clamp(2.5rem, 5vw, 4rem);
   font-weight: 800;
   line-height: 1;
-  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+  background: linear-gradient(135deg, var(--white) 0%, var(--gold) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -482,7 +333,7 @@ button { cursor: none; border: none; background: none; font-family: inherit; }
   font-family: var(--font-display);
   font-size: clamp(8rem, 20vw, 18rem);
   font-weight: 800;
-  color: rgba(201, 168, 76, 0.025);
+  color: rgba(147, 197, 253, 0.025);
   line-height: 1;
   pointer-events: none;
   user-select: none;
@@ -490,26 +341,6 @@ button { cursor: none; border: none; background: none; font-family: inherit; }
   right: -2rem;
   top: -2rem;
   letter-spacing: -0.05em;
-}
-
-/* ==========================================
-   TIMELINE
-   ========================================== */
-.timeline-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--gold);
-  box-shadow: 0 0 12px rgba(201, 168, 76, 0.5);
-  flex-shrink: 0;
-}
-
-.timeline-line {
-  width: 1px;
-  flex-grow: 1;
-  background: linear-gradient(to bottom, var(--gold), transparent);
-  min-height: 40px;
-  margin: 4px auto;
 }
 
 /* ==========================================
@@ -523,7 +354,7 @@ button { cursor: none; border: none; background: none; font-family: inherit; }
 
 .glow-email:hover {
   color: var(--gold-light);
-  text-shadow: 0 0 30px rgba(201, 168, 76, 0.4), 0 0 80px rgba(201, 168, 76, 0.15);
+  text-shadow: 0 0 30px rgba(147, 197, 253, 0.4), 0 0 80px rgba(147, 197, 253, 0.15);
 }
 
 /* ==========================================

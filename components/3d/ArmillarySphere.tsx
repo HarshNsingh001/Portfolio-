@@ -179,9 +179,9 @@ interface ArmillarySceneProps {
 
 function ArmillaryScene({
   scrollProgress,
-  gold = '#C9A84C',
-  goldLight = '#E8C87A',
-  goldDark = '#8B6914',
+  gold = '#93C5FD',
+  goldLight = '#E0F2FE',
+  goldDark = '#3B82F6',
 }: ArmillarySceneProps) {
   const groupRef = useRef<THREE.Group>(null);
 
@@ -267,11 +267,11 @@ interface ArmillarySphereProps {
 
 export default function ArmillarySphere({
   scrollProgress = 0,
-  gold = '#C9A84C',
-  goldLight = '#E8C87A',
-  goldDark = '#8B6914',
-  lightColor1 = '#FFE090',
-  lightColor2 = '#C9A84C',
+  gold = '#93C5FD',
+  goldLight = '#E0F2FE',
+  goldDark = '#3B82F6',
+  lightColor1 = '#93C5FD',
+  lightColor2 = '#E0F2FE',
 }: ArmillarySphereProps) {
   return (
     <Canvas
